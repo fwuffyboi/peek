@@ -11,9 +11,10 @@ import (
 func getIP() string {
 	url := "https://ipinfo.io/ip"
 
+	log.Info("GeIP: Attempting to get the server's IP address.")
 	response, err := http.Get(url)
 	if err != nil {
-		log.Errorf("GeIP: Unknown error. Err: %s", err)
+		log.Panicf("GeIP: Unknown error. Err: %s", err)
 	}
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
