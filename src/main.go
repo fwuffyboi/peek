@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"net/http"
@@ -45,6 +46,7 @@ func main() {
 	}
 
 	// Get the server ip and save into var
+	log.Info("Attempting to get server IP address.")
 	IP_ADDRESS = getIP()
 
 	// Run the webserver
@@ -73,11 +75,25 @@ func runGin(WEB_UI_ADDR string) {
 					"error": err,
 				})
 			}
+
+			// format uptime
+			var uptimeSeconds = int(uptime.Seconds())
+			uptimeDuration := time.Second * time.Duration(uptimeSeconds)
+			uptimeDays := int(uptimeDuration.Hours() / 24)
+			uptimeHours := int(uptimeDuration.Hours()) % 24
+			uptimeMinutes := int(uptimeDuration.Minutes()) % 60
+			uptimeSeconds = uptimeSeconds % 60
+
+			uptimeFullRaw := fmt.Sprintf("%02dd-%02dh-%02dm-%02ds", uptimeDays, uptimeHours, uptimeMinutes, uptimeSeconds)
+			uptimeFullFriendly := fmt.Sprintf("%d days, %d hours, %d minutes, %d seconds", uptimeDays, uptimeHours, uptimeMinutes, uptimeSeconds)
+
 			c.JSON(http.StatusOK, gin.H{
-				"application":        "Peek",
+				"applicationName":    "Peek",
 				"applicationVersion": VERSION,
 
-				"uptime-seconds": uptime.Seconds(),
+				"uptime-seconds":           uptime.Seconds(),
+				"uptime-ddhhmmss-raw":      uptimeFullRaw,
+				"uptime-ddhhmmss-friendly": uptimeFullFriendly,
 
 				"serverIP":      IP_ADDRESS,
 				"ServerCountry": countryFromIP(IP_ADDRESS),
