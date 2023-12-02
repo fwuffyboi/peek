@@ -20,5 +20,7 @@ TODO:
  - [x] User unfriendly uptime
  - [ ] Support RU,EN languages
  - [ ] Setup localisation
+ - [ ] Be able to shut down server
+ - [ ] Be able to stop Peek
 
  - [ ] Release V1.0.0 once api is done to basic level.
