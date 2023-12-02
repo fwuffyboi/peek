@@ -27,18 +27,22 @@ func countryFromIP(ipAddress string) string {
 
 	ip := net.ParseIP(ipAddress)
 	if ip == nil {
-		log.Fatal("Invalid IP address")
+		log.Fatal("CFIP: No IP address")
 	}
 
 	err = db.Lookup(ip, &record)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("CFIP: Error occured while looking IP up in database. Err: %s", err)
 	}
 
-	log.Infof("CFIP: IP: %s, Country: %s\n", ipAddress, record.Country.ISOCode)
 	if record.Country.ISOCode == "" {
-		log.Warnf("CFIP: IP: %s, Country: %s\n", ipAddress, record.Country.ISOCode)
-		return "Unknown"
+		if ipAddress == "127.0.0.1" {
+			log.Infof("CFIP: IP: %s, Country: %s\n", ipAddress, "Localhost")
+			return "Localhost"
+		} else {
+			log.Warnf("CFIP: IP: %s, Country: %s\n", ipAddress, record.Country.ISOCode)
+			return "Unknown"
+		}
 	} else {
 		log.Infof("CFIP: IP: %s, Country: %s\n", ipAddress, record.Country.ISOCode)
 		return record.Country.ISOCode
