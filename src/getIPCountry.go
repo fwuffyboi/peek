@@ -37,14 +37,14 @@ func countryFromIP(ipAddress string) string {
 
 	if record.Country.ISOCode == "" {
 		if ipAddress == "127.0.0.1" {
-			log.Infof("CFIP: IP: %s, Country: %s\n", ipAddress, "Localhost")
+			log.Infof("CFIP: IP: %s, Country: %s", ipAddress, "Localhost")
 			return "Localhost"
 		} else {
-			log.Warnf("CFIP: IP: %s, Country: %s\n", ipAddress, record.Country.ISOCode)
+			log.Warnf("CFIP: IP: %s, Country: %s", ipAddress, record.Country.ISOCode)
 			return "Unknown"
 		}
 	} else {
-		log.Infof("CFIP: IP: %s, Country: %s\n", ipAddress, record.Country.ISOCode)
+		log.Infof("CFIP: IP: %s, Country: %s", ipAddress, record.Country.ISOCode)
 		return record.Country.ISOCode
 	}
 }
