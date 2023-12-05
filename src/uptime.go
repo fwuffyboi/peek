@@ -50,3 +50,15 @@ func parseUptime(uptimeStr string) (float64, error) {
 
 	return uptimeSec, nil
 }
+
+func formatUptime(uptime time.Duration) (string, string) {
+	var uptimeSeconds = int(uptime.Seconds())
+	uptimeDuration := time.Second * time.Duration(uptimeSeconds)
+	uptimeDays := int(uptimeDuration.Hours() / 24)
+	uptimeHours := int(uptimeDuration.Hours()) % 24
+	uptimeMinutes := int(uptimeDuration.Minutes()) % 60
+	uptimeSeconds = uptimeSeconds % 60
+	uptimeFullRaw := fmt.Sprintf("%02dd-%02dh-%02dm-%02ds", uptimeDays, uptimeHours, uptimeMinutes, uptimeSeconds)
+	uptimeFullFriendly := fmt.Sprintf("%d days, %d hours, %d minutes, %d seconds", uptimeDays, uptimeHours, uptimeMinutes, uptimeSeconds)
+	return uptimeFullFriendly, uptimeFullRaw
+}
