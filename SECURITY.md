@@ -11,6 +11,6 @@ currently being supported with security updates.
 | < 1.0.0 | :white_check_mark: |
 
 ## Reporting a Vulnerability
-If a vulnerability is discovered, please alert the devlopers by creating a security issue(NOT A PUBLIC ISSUE) on Github.
+If a vulnerability is discovered, please alert the developers by creating a security issue(NOT A PUBLIC ISSUE) on GitHub.
 
-If this is not posssible for you, then please email [fwuffyboi](https://github.com/fwuffyboi) at [biscuitisnotacookie AT protonmail DOT com](mailto:biscuitisnotacookie@protonmail.com)
+If this is not possible for you, then please email [fwuffyboi](https://github.com/fwuffyboi) at [biscuitisnotacookie AT protonmail DOT com](mailto:biscuitisnotacookie@protonmail.com)
