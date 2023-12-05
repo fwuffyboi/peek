@@ -88,7 +88,6 @@ func runGin(WEB_UI_ADDR string) {
 			uptimeHours := int(uptimeDuration.Hours()) % 24
 			uptimeMinutes := int(uptimeDuration.Minutes()) % 60
 			uptimeSeconds = uptimeSeconds % 60
-
 			uptimeFullRaw := fmt.Sprintf("%02dd-%02dh-%02dm-%02ds", uptimeDays, uptimeHours, uptimeMinutes, uptimeSeconds)
 			uptimeFullFriendly := fmt.Sprintf("%d days, %d hours, %d minutes, %d seconds", uptimeDays, uptimeHours, uptimeMinutes, uptimeSeconds)
 
@@ -102,7 +101,7 @@ func runGin(WEB_UI_ADDR string) {
 				"uptime-ddhhmmss-friendly": uptimeFullFriendly,
 
 				"serverIP":      IP_ADDRESS,
-				"ServerCountry": SERVER_COUNTRY,
+				"serverCountry": SERVER_COUNTRY,
 
 				"clientIP":      c.ClientIP(),
 				"clientCountry": countryFromIP(c.ClientIP()),
