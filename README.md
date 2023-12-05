@@ -1,7 +1,19 @@
-# peek
+# Peek
 Take a peek at your server's usage statistics.
 
-TODO:
+### What is Peek?
+Peek is a simple utility tool designed for production-level servers that allows system administrators, database architects, etc to decisively take quick action based upon system resource usage. 
+
+It can also be used if you're curious about how much RAM or CPU usage a (linux or darwin derivative)device is using.
+
+## Disclaimer
+This application has not been tested throughly for exploits. If security vulnerbilities are discovered, please see our [security policy](https://github.com/fwuffyboi/peek/security/policy).
+
+### Authors:
+- [fwuffyboi](https://github.com/fwuffyboi)
+
+
+### TODO:
  - [ ] Add a screenshot to README
  - [ ] Add support for a yaml config
  - [ ] Be able to get the server's country from the IP
@@ -18,8 +30,7 @@ TODO:
  - [ ] CPU usage
  - [x] User friendly uptime
  - [x] User unfriendly uptime
- - [ ] Support RU,EN languages
- - [ ] Setup localisation
+ - [ ] Support at least RU and EN
  - [ ] Be able to shut down server
  - [ ] Be able to stop Peek
 
