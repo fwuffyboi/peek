@@ -1,23 +1,21 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
-	"net/http"
 	"runtime"
 	"time"
 )
 
 // Define constants
 const (
-	WEB_UI_ADDR = "0.0.0.0:42649" // Address of the webserver, HAS to be in the format of: IP:PORT
-	VERSION     = "0.0.1"         // Version of Peek
+	WebUiAddr = "0.0.0.0:42649" // Address of the webserver, HAS to be in the format of: IP:PORT
+	VERSION   = "0.0.1"         // Version of Peek
 )
 
-var UNSUPPORTED_OS = false // assume false until proven true
-var IP_ADDRESS = ""        // IP address of the server
-var SERVER_COUNTRY = ""    // Country of the server, based on IP
+var UnsupportedOS = false // assume false until proven true
+var IpAddress = ""        // IP address of the server
+var ServerCountry = ""    // Country of the server, based on IP
 
 func main() {
 	// Log when shit was started up
@@ -43,22 +41,22 @@ func main() {
 	default:
 		log.Error("Unsupported operating system detected.")
 		log.Panic("This program only supports the Linux/Darwin(MacOS) operating systems.")
-		UNSUPPORTED_OS = true
+		UnsupportedOS = true
 	}
 
 	// Get the server ip and save into var
 	log.Info("Attempting to get server IP address.")
-	IP_ADDRESS = getIP()
+	IpAddress = getIP()
 
 	log.Infof("Attempting to get server's country from IP address.")
-	SERVER_COUNTRY = countryFromIP(IP_ADDRESS)
+	ServerCountry = countryFromIP(IpAddress)
 
 	// Run the webserver
-	runGin(WEB_UI_ADDR)
+	runGin(WebUiAddr)
 }
 
 // Starts and runs the webserver, using the gin framework
-func runGin(WEB_UI_ADDR string) {
+func runGin(WebUiAddr string) {
 	log.Info("GIN: Starting the <<Peek>> WebServer...")
 
 	r := gin.Default()
@@ -68,49 +66,12 @@ func runGin(WEB_UI_ADDR string) {
 	if err != nil {
 		log.Panicf("GIN: Failed to set trusted proxies: %s", err)
 	}
-	r.GET("/api/full", func(c *gin.Context) {
-		if UNSUPPORTED_OS {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"Ошибка": "Данная операционная система не поддерживается. Единственными поддерживаемыми операционными системами являются: Linux, Mac OS",
-			})
-		} else {
-			uptime, err := getUptime()
-			if err != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{
-					"error": err,
-				})
-			}
+	r.GET("/api/full", func(c *gin.Context) { apiFull(c) })                // return all api/json info
+	r.GET("/api/shutdown", func(c *gin.Context) { apiShutdownServer(c) })  // return uptime
+	r.POST("/api/shutdown", func(c *gin.Context) { apiShutdownServer(c) }) // shutdown the server
 
-			// format uptime
-			var uptimeSeconds = int(uptime.Seconds())
-			uptimeDuration := time.Second * time.Duration(uptimeSeconds)
-			uptimeDays := int(uptimeDuration.Hours() / 24)
-			uptimeHours := int(uptimeDuration.Hours()) % 24
-			uptimeMinutes := int(uptimeDuration.Minutes()) % 60
-			uptimeSeconds = uptimeSeconds % 60
-			uptimeFullRaw := fmt.Sprintf("%02dd-%02dh-%02dm-%02ds", uptimeDays, uptimeHours, uptimeMinutes, uptimeSeconds)
-			uptimeFullFriendly := fmt.Sprintf("%d days, %d hours, %d minutes, %d seconds", uptimeDays, uptimeHours, uptimeMinutes, uptimeSeconds)
-
-			// json we shit out to the api
-			c.JSON(http.StatusOK, gin.H{
-				"applicationName":    "Peek",
-				"applicationVersion": VERSION,
-
-				"uptime-seconds":           uptime.Seconds(),
-				"uptime-ddhhmmss-raw":      uptimeFullRaw,
-				"uptime-ddhhmmss-friendly": uptimeFullFriendly,
-
-				"serverIP":      IP_ADDRESS,
-				"serverCountry": SERVER_COUNTRY,
-
-				"clientIP":      c.ClientIP(),
-				"clientCountry": countryFromIP(c.ClientIP()),
-			})
-		}
-
-	})
-	log.Info("GIN: <<Peek>> WebServer started at address: http://" + WEB_UI_ADDR)
-	err = r.Run(WEB_UI_ADDR)
+	log.Info("GIN: <<Peek>> WebServer started at address: http://" + WebUiAddr)
+	err = r.Run(WebUiAddr)
 	if err != nil {
 		log.Panicf("GIN: Failed to start the <<Peek>> WebServer: %s", err)
 	} // listen and serve on 0.0.0.0:42649
