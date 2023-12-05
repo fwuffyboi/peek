@@ -20,7 +20,7 @@ var ServerCountry = ""    // Country of the server, based on IP
 func main() {
 	// Log when shit was started up
 	log.Infof("<<Peek>> Version: %s", VERSION)
-	log.Infof("Application started at time: %s, on the date: %s.",
+	log.Infof("Application started at time: %s, on the date: %s(YYYY-MM-DD).",
 		time.Now().Format("15:04:05"),   // Format for hh:mm:ss
 		time.Now().Format("2006-01-02"), // Format for yyyy-mm-dd
 	)
