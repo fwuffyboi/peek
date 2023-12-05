@@ -10,12 +10,12 @@ import (
 func countryFromIP(ipAddress string) string {
 	db, err := maxminddb.Open("./src/assets/dbip-country-lite-2023-11.mmdb")
 	if err != nil {
-		log.Fatal(err)
+		log.Errorf("CFIP: Err: %s", err)
 	}
 	defer func(db *maxminddb.Reader) {
 		err := db.Close()
 		if err != nil {
-			log.Fatalf("CFIP: Error defering. err: %s", err)
+			log.Errorf("CFIP: Error defering. err: %s", err)
 		}
 	}(db)
 
@@ -27,12 +27,12 @@ func countryFromIP(ipAddress string) string {
 
 	ip := net.ParseIP(ipAddress)
 	if ip == nil {
-		log.Fatal("CFIP: No IP address")
+		log.Error("CFIP: No IP address")
 	}
 
 	err = db.Lookup(ip, &record)
 	if err != nil {
-		log.Fatalf("CFIP: Error occured while looking IP up in database. Err: %s", err)
+		log.Errorf("CFIP: Error occured while looking IP up in database. Err: %s", err)
 	}
 
 	if record.Country.ISOCode == "" {
