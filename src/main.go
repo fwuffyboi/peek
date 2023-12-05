@@ -45,7 +45,6 @@ func main() {
 	}
 
 	// Get the server ip and save into var
-	log.Info("Attempting to get server IP address.")
 	IpAddress = getIP()
 
 	log.Infof("Attempting to get server's country from IP address.")
@@ -59,16 +58,18 @@ func main() {
 func runGin(WebUiAddr string) {
 	log.Info("GIN: Starting the <<Peek>> WebServer...")
 
+	gin.SetMode(gin.ReleaseMode) // set to production mode
 	r := gin.Default()
 	r.ForwardedByClientIP = true
+
 	err := r.SetTrustedProxies([]string{"127.0.0.1"})
-	gin.SetMode(gin.ReleaseMode) // set to production mode
 	if err != nil {
 		log.Panicf("GIN: Failed to set trusted proxies: %s", err)
 	}
-	r.GET("/api/full", func(c *gin.Context) { apiFull(c) })                // return all api/json info
-	r.GET("/api/shutdown", func(c *gin.Context) { apiShutdownServer(c) })  // return uptime
-	r.POST("/api/shutdown", func(c *gin.Context) { apiShutdownServer(c) }) // shutdown the server
+
+	r.GET("/api/full/", func(c *gin.Context) { apiFull(c) })                // return all api/json info
+	r.GET("/api/", func(c *gin.Context) { apiEndpoints(c) })                // return all api endpoints
+	r.POST("/api/shutdown/", func(c *gin.Context) { apiShutdownServer(c) }) // shutdown the server
 
 	log.Info("GIN: <<Peek>> WebServer started at address: http://" + WebUiAddr)
 	err = r.Run(WebUiAddr)
