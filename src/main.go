@@ -67,9 +67,10 @@ func runGin(WebUiAddr string) {
 		log.Panicf("GIN: Failed to set trusted proxies: %s", err)
 	}
 
-	r.GET("/api/full/", func(c *gin.Context) { apiFull(c) })                // return all api/json info
-	r.GET("/api/", func(c *gin.Context) { apiEndpoints(c) })                // return all api endpoints
-	r.POST("/api/shutdown/", func(c *gin.Context) { apiShutdownServer(c) }) // shutdown the server
+	r.GET("/api/", func(c *gin.Context) { apiEndpoints(c) })                                    // return all api endpoints
+	r.GET("/api/full/", func(c *gin.Context) { apiFull(c) })                                    // return all api/json info
+	r.POST("/api/shutdown/", shutdownMiddleware, func(c *gin.Context) { apiShutdownServer(c) }) // shutdown the server
+	r.POST("/api/stop/", func(c *gin.Context) { shutdownPeek(c) })                              // stop the peek application
 
 	log.Info("GIN: <<Peek>> WebServer started at address: http://" + WebUiAddr)
 	err = r.Run(WebUiAddr)
