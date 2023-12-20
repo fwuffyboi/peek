@@ -40,7 +40,7 @@ func countryFromIP(ipAddress string) string {
 			log.Infof("CFIP: IP: %s, Country: %s", ipAddress, "Localhost")
 			return "Localhost"
 		} else {
-			log.Warnf("CFIP: IP: %s, Country: %s", ipAddress, record.Country.ISOCode)
+			log.Warnf("CFIP: IP: %s, Country: %s", ipAddress, "Unknown")
 			return "Unknown"
 		}
 	} else {

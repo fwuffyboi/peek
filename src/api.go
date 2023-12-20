@@ -138,3 +138,20 @@ func stopPeek(c *gin.Context) {
 		}
 	}
 }
+
+// Return the logs
+func apiLogs(c *gin.Context) { // TODO: add auth
+	if UnsupportedOS {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"err": "This operating system is not supported. Please use a Linux or Darwin(MacOS) derivative.",
+		})
+	} else {
+		fileContents, err := os.ReadFile("peek.log")
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"err": err,
+			})
+		}
+		c.String(200, string(fileContents))
+	}
+}

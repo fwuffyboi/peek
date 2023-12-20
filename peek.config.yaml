@@ -1,26 +1,32 @@
 auth:
-  auth-required: true # Is auth required for peek? If false, ALL auth is disabled.
-  auth-level: 1       # The auth level used across peek. See the README.md for more info. Default: 1
-  user: root          # username is stored in plain text.
-  password: toor      # PASSWORD IS STORED IN PLAIN TEXT!!!!
+  auth-required: true # Is auth required for peek? If false, ALL auth is disabled. TODO
+  auth-level: 1       # The auth level used across peek. See the README.md for more info. Default: 1 TODO
+  user: root          # username is stored in plain text. TODO
+  password: toor      # PASSWORD IS STORED IN PLAIN TEXT!!!! TODO
+
+logging:
+  log-level: "INFO"   # The log level to use. See the README.md for more info. Default: 1 TODO
+  log-file: "peek.log"  # The log file to use. Default: peek.log TODO
 
 api:
   api-host: "0.0.0.0" # The host to bind to. Default: 0.0.0.0
   api-port: 42649     # The port to bind to. Default: 42649
 
+  rate-limit: 5       # How many requests can a user make per second to the API? Default: 5. 0 for no limit.
+
 actions:
   shutdown-system: true  # Should a user be able to shut down the server?
-  shutdown-peek: true    # Should a user be able to shut down peek?
+  shutdown-peek: true    # Should a user be able to shut down peek? TODO
 
 show:
-  show-sys-specs: true   # Should the system specification info be shown?
+  show-sys-specs: true   # Should the system specification info be shown? TODO
   show-hostname: true    # Should the hostname be shown?
   show-ip: true          # Should the IP be shown?
   show-country: true     # Should the country be shown?
   show-uptime: true      # Should the uptime be shown?
-  show-ram: true         # Should the ram usage be shown?
-  show-cpu: true         # Should the cpu usage be shown?
-  show-disk: true        # Should the disk usage be shown?
-  show-temperature: true # Should the temperature be shown?
-  show-raid: true        # Should the raid status be shown?
-  show-gpu: true         # Should the gpu usage be shown?
+  show-ram: true         # Should the ram usage be shown? TODO
+  show-cpu: true         # Should the cpu usage be shown? TODO
+  show-disk: true        # Should the disk usage be shown? TODO
+  show-temperature: true # Should the temperature be shown? TODO
+  show-raid: true        # Should the raid status be shown? TODO
+  show-gpu: true         # Should the gpu usage be shown? TODO

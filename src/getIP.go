@@ -14,7 +14,7 @@ func getIP() string {
 	log.Info("GeIP: Attempting to get the server's IP address.")
 	response, err := http.Get(url)
 	if err != nil {
-		log.Panicf("GeIP: Unknown error. Err: %s", err)
+		log.Fatalf("GeIP: Unknown error. Err: %s", err)
 	}
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()

@@ -14,10 +14,17 @@ type T struct {
 		Password     string `yaml:"password"`
 	} `yaml:"auth"`
 
+	// log settings
+	Logging struct {
+		LogLevel string `yaml:"log-level"`
+		LogFile  string `yaml:"log-file"`
+	} `yaml:"logging"`
+
 	// api shit
 	Api struct {
-		ApiHost string `yaml:"api-host"`
-		ApiPort int    `yaml:"api-port"`
+		ApiHost   string `yaml:"api-host"`
+		ApiPort   int    `yaml:"api-port"`
+		RateLimit int    `yaml:"rate-limit"`
 	} `yaml:"api"`
 
 	// Action stuff?
