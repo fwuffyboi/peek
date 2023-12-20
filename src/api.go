@@ -107,7 +107,7 @@ func apiShutdownServer(c *gin.Context) {
 }
 
 // Shutdown peek
-func shutdownPeek(c *gin.Context) {
+func stopPeek(c *gin.Context) {
 	if UnsupportedOS {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"err": "This operating system is not supported. Please use a Linux or Darwin(MacOS) derivative.",
@@ -119,9 +119,15 @@ func shutdownPeek(c *gin.Context) {
 			})
 		} else { // if is a post request
 			if c.Query("confirm") == "true" { // if ?confirm=true in url
+				defer func() {
+					log.Warnf("SHUTDOWN: %s has made a Peek shutdown request.", c.ClientIP())
+					log.Warn("Peek is shutting down...")
+					os.Exit(0)
+				}()
+
 				c.JSON(http.StatusOK, gin.H{
 					"msg": c.ClientIP() + " has requested that Peek shuts down. Shutting down NOW!",
-				})
+				}) // TODO: make this actually respond to client
 
 			} else {
 				c.JSON(http.StatusBadRequest, gin.H{
@@ -131,14 +137,4 @@ func shutdownPeek(c *gin.Context) {
 
 		}
 	}
-}
-
-func shutdownMiddleware(c *gin.Context) {
-	defer func() {
-		log.Warnf("SHUTDOWN: %s has made a Peek shutdown request.", c.ClientIP())
-		log.Warn("<<Peek>> is shutting down...")
-		os.Exit(0)
-	}()
-
-	c.Next() // TODO: figure out how to make this work
 }

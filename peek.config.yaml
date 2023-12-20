@@ -1,21 +1,26 @@
-# auth
-auth-required: true # Is auth required for peek? If false, ALL auth is disabled.
-auth-level: 1       # The auth level used across peek. See the README.md for more info. Default: 1
-user: root          # username is stored in plain text.
-password: toor      # PASSWORD IS STORED IN PLAIN TEXT!!!!
+auth:
+  auth-required: true # Is auth required for peek? If false, ALL auth is disabled.
+  auth-level: 1       # The auth level used across peek. See the README.md for more info. Default: 1
+  user: root          # username is stored in plain text.
+  password: toor      # PASSWORD IS STORED IN PLAIN TEXT!!!!
 
-# server
-host: 0.0.0.0 # The host to bind to. Default: 0.0.0.0
-port: 42649   # The port to bind to. Default: 42649
+api:
+  api-host: "0.0.0.0" # The host to bind to. Default: 0.0.0.0
+  api-port: 42649     # The port to bind to. Default: 42649
 
-# disable/enable features
-shutdown-system: true  # Should a user be able to shut down the server?
-shutdown-peek: true    # Should a user be able to shut down peek?
-show-hostname: true    # Should the hostname be shown on the main page?
-show-ip: true          # Should the IP be shown on the main page?
-show-uptime: true      # Should the uptime be shown on the main page?
-show-ram: true         # Should the ram usage be shown on the main page?
-show-cpu: true         # Should the cpu usage be shown on the main page?
-show-disk: true        # Should the disk usage be shown on the main page?
-show-temperature: true # Should the temperature be shown on the main page?
-show-raid: true        # Should the raid status be shown on the main page?
+actions:
+  shutdown-system: true  # Should a user be able to shut down the server?
+  shutdown-peek: true    # Should a user be able to shut down peek?
+
+show:
+  show-sys-specs: true   # Should the system specification info be shown?
+  show-hostname: true    # Should the hostname be shown?
+  show-ip: true          # Should the IP be shown?
+  show-country: true     # Should the country be shown?
+  show-uptime: true      # Should the uptime be shown?
+  show-ram: true         # Should the ram usage be shown?
+  show-cpu: true         # Should the cpu usage be shown?
+  show-disk: true        # Should the disk usage be shown?
+  show-temperature: true # Should the temperature be shown?
+  show-raid: true        # Should the raid status be shown?
+  show-gpu: true         # Should the gpu usage be shown?
