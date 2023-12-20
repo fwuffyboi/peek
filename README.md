@@ -5,8 +5,6 @@ Take a peek at your server's usage statistics.
 ### What is Peek?
 Peek is a simple utility tool designed for servers that allows quick monitoring of server usage statistics.
 
-It can also be used if you're curious about how much RAM or CPU usage a (linux or darwin derivative)device is using.
-
 This application is designed to be used on a server, it may also be used on a personal computer, however this is not it's intended purpose.
 
 
@@ -22,8 +20,8 @@ This application has not been tested thoroughly for exploits, thus, may not be a
 If security vulnerabilities are discovered, please see our [security policy](https://github.com/fwuffyboi/peek/security/policy).
 
 
-### Contributors:
-- [fwuffyboi](https://github.com/fwuffyboi)
+### Contributors
+- [fwuffyboi](https://github.com/fwuffyboi) - Creator, Documentation, API
 
 
 ### Project TODO:
@@ -34,14 +32,14 @@ If security vulnerabilities are discovered, please see our [security policy](htt
  - [ ] Create a better way to get the server's IP
  - [ ] Stick to a standard for logging errors, etc.
  - [ ] Add support for logs to be seen through WebUI
- - [ ] Add a functioning fucking WebUI
- - [ ] Support at least RU and EN
+ - [ ] Create a WebUI
+ - [ ] Support at least RU and EN languages
  - [ ] Add authentication to WebUI by default (NO DEFAULT PASSWORDS.)
 
 
 ### API TODO:
  - [ ] Add authentication on API
- - [ ] Add support for a yaml config
+ - [x] Add support for a yaml config
  - [x] Be able to get the server's country from the IP
  - [ ] Allow viewing disk storage use
  - [ ] Allow seeing RAID array information
@@ -51,9 +49,13 @@ If security vulnerabilities are discovered, please see our [security policy](htt
  - [x] User unfriendly uptime
  - [x] See hostname
  - [x] Be able to shut down server
- - [ ] Be able to stop Peek
+ - [x] Custom rate limit to all API endpoints
+ - [x] Be able to stop Peek - Note: Kinda works. It shuts down but does not tell the client. It just closes connection on them.
  - [ ] CPU temperature
  - [ ] Email if a certain stat gets to certain level
+ - [ ] Be able to see if a certain port is responsive
+ - [ ] Be able to see the logs of Peek
+ - [ ] Be able to download the IP database if not present
 
 
- - [ ] Release V1.0.0 once api is done to basic level and supports yaml config.
+ - [ ] Release V1.0.0 once api is done(doesn't need auth) and supports yaml config.
