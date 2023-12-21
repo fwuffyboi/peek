@@ -26,3 +26,4 @@ go.work
 # jetbrains shit
 .idea
 go_build_github_com_fwuffyboi_peek_src
+src/src
