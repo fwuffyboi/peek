@@ -27,8 +27,8 @@ If security vulnerabilities are discovered, please see our [security policy](htt
 ### Project TODO:
  - [ ] Add a screenshot to README
 
- - [ ] Add support for multiple servers to be linked (how??)
- - [ ] Add fallback if ipinfo.io doesnt work in getIP()
+ - [ ] Add support for multiple servers to added to the web UI
+ - [ ] Add a fallback if ipinfo.io doesnt work
  - [ ] Create a better way to get the server's IP
  - [ ] Stick to a standard for logging errors, etc.
  - [ ] Add support for logs to be seen through WebUI
