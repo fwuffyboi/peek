@@ -20,5 +20,8 @@ func setupLogging() (*os.File, io.Writer, error) {
 	// TODO: Allow user to choose logging level
 	logrus.SetLevel(logrus.InfoLevel)
 
+	// make it json format
+	logrus.SetFormatter(&logrus.JSONFormatter{})
+
 	return file, multiWriter, nil
 }

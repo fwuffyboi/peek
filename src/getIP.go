@@ -1,10 +1,8 @@
 package main
 
 import (
-	"fmt"
 	log "github.com/sirupsen/logrus"
 	"io"
-	"io/ioutil"
 	"net/http"
 )
 
@@ -25,10 +23,10 @@ func getIP() string {
 	}(response.Body)
 
 	if response.StatusCode != http.StatusOK {
-		fmt.Printf("GeIP: Unexpected status code. Err: %d", response.StatusCode)
+		log.Warnf("GeIP: Unexpected status code. Err: %d", response.StatusCode)
 	}
 
-	body, err := ioutil.ReadAll(response.Body)
+	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		log.Errorf("GeIP: Error reading response body. Err: %s", err)
 	}

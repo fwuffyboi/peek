@@ -35,17 +35,21 @@ type T struct {
 
 	// Show stuff?
 	Show struct {
-		ShowSystemSpecs bool `yaml:"show-system-specs"`
-		ShowHostname    bool `yaml:"show-hostname"`
-		ShowIP          bool `yaml:"show-ip"`
-		ShowCountry     bool `yaml:"show-country"`
-		ShowUptime      bool `yaml:"show-uptime"`
-		ShowRAM         bool `yaml:"show-ram"`
-		ShowCPU         bool `yaml:"show-cpu"`
-		ShowDisk        bool `yaml:"show-disk"`
-		ShowTemp        bool `yaml:"show-temp"`
-		ShowRAID        bool `yaml:"show-raid"`
-		ShowGPU         bool `yaml:"show-gpu"`
+		ShowSystemSpecs   bool `yaml:"show-sys-specs"`
+		ShowHostname      bool `yaml:"show-hostname"`
+		ShowIP            bool `yaml:"show-ip"`
+		ShowServerCountry bool `yaml:"show-server-country"`
+		ShowClientCountry bool `yaml:"show-client-country"`
+		ShowUptime        bool `yaml:"show-uptime"`
+		ShowRAM           bool `yaml:"show-ram"`
+		ShowCPU           bool `yaml:"show-cpu"`
+		ShowDisk          bool `yaml:"show-disk"`
+		ShowCPUTemp       bool `yaml:"show-cpu-temp"`
+		ShowCPUUsage      bool `yaml:"show-cpu-use"`
+		ShowRAID          bool `yaml:"show-raid"`
+		ShowGPU           bool `yaml:"show-gpu"`
+		ShowLogsAPI       bool `yaml:"show-logs-api"`
+		ShowErrors        bool `yaml:"show-errors"`
 	} `yaml:"show"`
 }
 

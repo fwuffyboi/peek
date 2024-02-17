@@ -5,6 +5,7 @@ import (
 	ratelimit "github.com/JGLTechnologies/gin-rate-limit"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
+	ginlogrus "github.com/toorop/gin-logrus"
 	"os"
 	"runtime"
 	"strconv"
@@ -62,6 +63,16 @@ func main() {
 		UnsupportedOS = true
 	}
 
+	// check auth level
+	log.Info("Checking auth level...")
+	config, err := ConfigParser()
+	if err != nil {
+		log.Fatalf("Failed to get config: %s", err)
+	}
+	if config.Auth.AuthLevel > 2 || config.Auth.AuthLevel < 0 {
+		log.Fatalf("Auth level is invalid. Auth level must be between 0 and 2. Auth level is: %d", config.Auth.AuthLevel)
+	}
+
 	// Get the server ip and save into var
 	IpAddress = getIP()
 
@@ -69,7 +80,7 @@ func main() {
 	ServerCountry = countryFromIP(IpAddress)
 
 	// Get IP and port to run webserver on
-	config, err := ConfigParser()
+	config, err = ConfigParser()
 	if err != nil {
 		log.Fatalf("Failed to get config: %s", err)
 	}
@@ -88,8 +99,8 @@ func runGin(host string, port int, ginRatelimit int) {
 	log.Info("GIRL: Setting up rate limiter...")
 	// Create a limiter
 	if ginRatelimit == 0 {
-		log.Warnf("GIRL: Rate limit is set to 0, setting ratelimit to 50")
-		ginRatelimit = 50
+		log.Warnf("GIRL: Rate limit is set to unlimited, setting ratelimit to 1000")
+		ginRatelimit = 1000
 	}
 	store := ratelimit.InMemoryStore(&ratelimit.InMemoryOptions{
 		Rate:  time.Second,
@@ -102,6 +113,7 @@ func runGin(host string, port int, ginRatelimit int) {
 
 	gin.SetMode(gin.ReleaseMode) // set to production mode
 	r := gin.Default()           // create a gin router
+	r.Use(ginlogrus.Logger(log.StandardLogger()), rl)
 
 	r.ForwardedByClientIP = true
 
@@ -113,11 +125,11 @@ func runGin(host string, port int, ginRatelimit int) {
 
 	// Define routes
 	// INFO routes
+	r.GET("/", rl, func(c *gin.Context) { indexPage(c) })        // return the web ui
 	r.GET("/api/", rl, func(c *gin.Context) { apiEndpoints(c) }) // return all api endpoints
 
 	// NOACTION routes
-	r.GET("/api/full/", rl, func(c *gin.Context) { apiFull(c) })             // Return all api/json info
-	r.GET("/api/disk/all/", rl, func(c *gin.Context) { storageAllDisks(c) }) // Return all disk info	// AFTER TESTING OUTSIDE OF FLATPAK, THE ABOVE ROUTE WORKS. BUT ONLY OUTSIDE OF FLATPAK.
+	r.GET("/api/full/", rl, func(c *gin.Context) { apiFull(c) }) // Return all api/json info
 
 	// NOACTION AUTH routes
 	r.GET("/api/logs/all/", rl, func(c *gin.Context) { apiLogs(c) }) // return everything in the logfile
