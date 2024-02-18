@@ -55,7 +55,7 @@ The above screenshot shows the index page of the API. This is the response from 
 
 
 ### Project TODO:
- - [ ] Add screenshots to README
+ - [x] Add screenshots to README
 
  - [ ] Add support for multiple servers to added to the web UI
 
@@ -86,6 +86,7 @@ The above screenshot shows the index page of the API. This is the response from 
  - [ ] Allow selecting specific flag type (twitter, equal height, equal width, etc.)
  - [x] Make the API easier to parse
  - [ ] System time and timezone
+ - [ ] Change where the config is stored
  - [ ] Add a fallback if ipinfo.io doesn't work
  - [ ] Create a better way to get the server's IP
  - [ ] See open sessions (ssh, etc.) and who/where they are from
