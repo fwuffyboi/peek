@@ -1,0 +1,47 @@
+# This file is not designed to be downloaded manually. It is designed to be downloaded by peek if no configuration can be found.
+
+# THIS FILE WAS AUTOMATICALLY DOWNLOADED FROM GITHUB BY THE PROJECT PEEK.
+# THE SET VALUES ARE CONSIDERED "SAFE DEFAULTS" AND SHOULD BE CHANGED TO SUIT YOUR NEEDS.
+# IF YOU WOULD LIKE TO CHANGE ANY CONFIGURATION, PLEASE STOP THE APPLICATION, MAKE YOUR CHANGES TO THIS FILE, AND THEN RESTART THE APPLICATION.
+# IF THIS FILE IS DELETED, IT WILL BE RECREATED WITH THE DEFAULT VALUES.
+
+# The configuration file for peek. This file is in YAML format. See the README.md for more info.
+# Any value ending in "TODO" is not yet implemented, but is planned to as a future feature.
+
+auth:
+  auth-required: true          # Is auth required for peek? If false, ALL auth is disabled. TODO
+  auth-level: 1                # The auth level used across peek. See the README.md for more info. Default: 1 TODO
+  user: root                   # username is stored in plain text. TODO
+  password: toor               # PASSWORD IS STORED IN PLAIN TEXT!!!! TODO
+
+logging:
+  log-level: "INFO"            # The log level to use. See the README.md for more info. Default: "INFO" TODO
+  log-file: "peek.log"         # The log file to use. Default: peek.log TODO
+
+api:
+  api-host: "0.0.0.0"          # The host to bind to. Default: 0.0.0.0
+  api-port: 42649              # The port to bind to. Default: 42649
+
+  rate-limit: 5                # How many requests can a user make PER SECOND to the API? Default: 5. 0 for no limit.
+
+  shutdown-delay: 5            # How many minutes to wait before shutting down the server? Default: 1
+
+actions:
+  shutdown-system: false       # Should a user be able to shut down the server? TODO
+  shutdown-peek: false         # Should a user be able to shut down peek? TODO
+
+show:
+  show-sys-specs: true         # Should the system specification info be shown? TODO
+  show-hostname: true          # Should the hostname be shown?
+  show-ip: false               # Should the server's IP be shown?
+  show-server-country: true    # Should the server country be shown?
+  show-client-country: true    # Should the client country be shown?
+  show-uptime: true            # Should the uptime be shown?
+  show-ram: true               # Should the ram usage be shown?
+  show-cpu: true               # Should cpu related information be shown? TODO
+  show-cpu-use: true           # Should the cpu usage be shown?
+  show-disk: true              # Should disk related information be shown?
+  show-cpu-temp: true          # Should the temperature be shown?
+  show-raid: true              # Should RAID status of disks be shown? TODO
+  show-gpu: true               # Should the gpu related information be shown? TODO
+  show-logs-api: true          # Should the logs be shown on the API?
