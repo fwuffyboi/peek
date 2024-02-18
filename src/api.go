@@ -265,22 +265,20 @@ func apiShutdownServer(c *gin.Context) {
 }
 
 // Shutdown peek
-func stopPeek(c *gin.Context) { // TODO: add auth
+func stopPeek(c *gin.Context) {
 	if c.Request.Method != "POST" { // if not a post request
 		c.JSON(http.StatusMethodNotAllowed, gin.H{
 			"err": "To interact with this API endpoint, you must use a POST request.",
 		})
 	} else { // if is a post request
 		if c.Query("confirm") == "true" { // if ?confirm=true in url
-			defer func() {
-				log.Warnf("SHUTDOWN: %s has made a Peek shutdown request.", c.ClientIP())
-				log.Warn("Peek is shutting down...")
-				os.Exit(0)
-			}()
-
 			c.JSON(http.StatusOK, gin.H{
-				"msg": c.ClientIP() + " has requested that Peek shuts down. Shutting down NOW!",
+				"msg": c.ClientIP() + " has requested that Peek stops. Stopping this application NOW!",
 			}) // TODO: make this actually respond to client
+
+			log.Warnf("SHUTDOWN: %s has made a Peek shutdown request.", c.ClientIP())
+			log.Warn("Peek is shutting down...")
+			log.Fatal("Peek has been shut down due to a client's request (", c.ClientIP(), ").")
 
 		} else {
 			c.JSON(http.StatusBadRequest, gin.H{
