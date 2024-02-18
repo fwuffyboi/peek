@@ -31,6 +31,13 @@ func getIP() string {
 		log.Errorf("GeIP: Error reading response body. Err: %s", err)
 	}
 
-	log.Infof("Server IP address: %s", string(body))
-	return string(body)
+	config, err := ConfigParser()
+	if config.Show.ShowIP == false {
+		log.Warn("GeIP: IP address is disabled in the config. Censoring IP address from now.")
+		censoredIP := "xxx.xxx.xxx.xxx"
+		log.Infof("Server IP address: %s", censoredIP)
+	} else {
+		log.Infof("Server IP address: %s", string(body))
+		return string(body)
+	}
 }
