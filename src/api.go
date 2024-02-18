@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"net/http"
@@ -248,7 +247,6 @@ func apiShutdownServer(c *gin.Context) {
 				if err != nil {
 					log.Errorf("Error shutting down: %s", err)
 				} else {
-					fmt.Println(string(outputBytes))
 					c.JSON(http.StatusOK, gin.H{
 						"msg":        c.ClientIP() + " has requested a server shutdown in " + strconv.Itoa(shutdownDelay) + " minutes.",
 						"cmd_output": string(outputBytes),
