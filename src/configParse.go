@@ -22,14 +22,15 @@ type T struct {
 
 	// api shit
 	Api struct {
-		ApiHost   string `yaml:"api-host"`
-		ApiPort   int    `yaml:"api-port"`
-		RateLimit int    `yaml:"rate-limit"`
+		ApiHost       string `yaml:"api-host"`
+		ApiPort       int    `yaml:"api-port"`
+		RateLimit     int    `yaml:"rate-limit"`
+		ShutdownDelay int    `yaml:"shutdown-delay"`
 	} `yaml:"api"`
 
 	// Action stuff?
 	Actions struct {
-		SystemShutdown bool `yaml:"system-shutdown"`
+		SystemShutdown bool `yaml:"shutdown-system"`
 		ShutdownPeek   bool `yaml:"shutdown-peek"`
 	} `yaml:"actions"`
 

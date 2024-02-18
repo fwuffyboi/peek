@@ -20,9 +20,8 @@ const (
 	DefaultWebUiPort = 42649
 )
 
-var UnsupportedOS = false // assume false until proven true
-var IpAddress = ""        // IP address of the server
-var ServerCountry = ""    // Country of the server, based on IP
+var IpAddress = ""     // IP address of the server
+var ServerCountry = "" // Country of the server, based on IP
 
 func main() {
 	// Setup logging and obtain the log file handle and multi-writer
@@ -47,20 +46,17 @@ func main() {
 	// Copyright notices
 	log.Info("Peek is licensed under the MIT License. See LICENSE for more information.")
 	log.Infof("(C) %s Peek Contributors. All rights reserved.", time.Now().Format("2006"))
-	log.Info("Peek is a program written by: @fwuffyboi (https://github.com/fwuffyboi)")
-	log.Info("") // free space
 	log.Info("(C) IP Geolocation by DB-IP, https://db-ip.com/")
-	log.Info("") // free space
+	log.Info("Peek is a program written by: @fwuffyboi (https://github.com/fwuffyboi)")
 
 	// Check os, if windows, panic, else continue
 	log.Info("Checking what operating system is in use...")
 	switch runtime.GOOS {
-	case "linux", "darwin":
-		log.Info("Linux/darwin derivative detected.")
+	case "linux":
+		log.Info("Linux derivative detected.")
 	default:
 		log.Error("Unsupported operating system detected.")
-		log.Fatal("This program only supports the Linux/Darwin(MacOS) operating systems.")
-		UnsupportedOS = true
+		log.Fatal("This program only supports Linux distributions.")
 	}
 
 	// check auth level

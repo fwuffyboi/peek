@@ -5,7 +5,7 @@ auth:
   password: toor      # PASSWORD IS STORED IN PLAIN TEXT!!!! TODO
 
 logging:
-  log-level: "INFO"   # The log level to use. See the README.md for more info. Default: 1 TODO
+  log-level: "INFO"   # The log level to use. See the README.md for more info. Default: "INFO" TODO
   log-file: "peek.log"  # The log file to use. Default: peek.log TODO
 
 api:
@@ -13,6 +13,8 @@ api:
   api-port: 42649     # The port to bind to. Default: 42649
 
   rate-limit: 5       # How many requests can a user make PER SECOND to the API? Default: 5. 0 for no limit.
+
+  shutdown-delay: 1   # How many minutes to wait before shutting down the server? Default: 1
 
 actions:
   shutdown-system: true  # Should a user be able to shut down the server? TODO

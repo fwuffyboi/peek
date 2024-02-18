@@ -56,9 +56,7 @@ The above screenshot shows the index page of the API. This is the response from 
 
 ### Project TODO:
  - [x] Add screenshots to README
-
  - [ ] Add support for multiple servers to added to the web UI
-
  - [ ] Stick to a standard for logging errors, etc.
  - [x] Add support for logs to be seen through WebUI
  - [ ] Create a WebUI
