@@ -15,19 +15,41 @@ This application is designed to be used on a server, however it may also be used
 
 
 ### Installation
-To install Peek, you will need to have Go installed on your system. If you do not have Go installed, you can download it from [here](https://golang.org/dl/).
+To install Peek, you will need to have Go installed on your system. If you do not have Go installed, you can download it from [here](https://golang.org/dl/) (https://golang.org/dl).
 
-Once you have Go installed, you can install Peek by running the following commands:
+Once you have Go installed, you can install Peek by running the following commands in your directory of choosing:
 ```bash
-git clone https://github.com/fwuffyboi/peek.git
-cd peek/src
+git clone https://github.com/fwuffyboi/peek.git # Clone the repo
+cd peek/src        # Go into the necessary directory
 go build -o peek . # Build the file
 sudo chmod +x peek # Make the file executable
 sudo mv peek /usr/local/bin/peek # Move the file to /usr/local/bin
+cd ../.. # Get out of the directory
+sudo rm -rf peek # Delete the unneccessary repo
 ```
-Then just run `peek` to start the server. You can now access the server at its default port of `http://0.0.0.0:42649`.
 
-⚠️⚠️⚠️ **WARNING: Currently, Peek does not have any authentication. This means that anyone who can access the server can see _ALL_ statistics that are enabled in the configuration file.** ⚠️⚠️⚠️
+Then just run the command `peek` in your terminal to start. You can now access the server at its default port of `http://0.0.0.0:42649`.
+
+⚠️⚠️⚠️⚠️⚠️
+
+**WARNING: Currently, Peek does not have any authentication. This means that anyone on your server's local network can access the server's API, and they _WILL_ be able access _ALL_ statistics and endpoints that are enabled in the configuration file. However, the default configuration is considered to be a "Safe default", allowing anyone on the local network to _ONLY_ view the logs of Peek (This is not sensitive information) or be able to see system information EXCEPT the server's public IP address. No actions (such as shutting the server down, or stopping peek) can be taked from the API on these defaults.** 
+
+⚠️⚠️⚠️⚠️⚠️
+
+
+### How to configure
+
+To configure Peek, you must first run the application after moving it to /usr/local/bin/peek. This will create a default confiiguration in /home/{YOUR_USERNAME}/.config/peek called peek.config.yaml. It is recommended to stop the Peek application before editing this, as that can lead to unsaved changes. Once edited, start Peek again and it will load your new configuration. If there is an issue with it not working, please feel free to create a GitHub issue.
+
+
+# How to uninstall
+
+Run these commands after stopping the Peek application:
+```bash
+sudo rm -rf /home/{YOUR_USERNAME}/.config/peek
+sudo rm -rf /usr/local/bin/peek
+```
+
 
 ### Screenshots
 ![Screenshot](/src/assets/readme/ss-api-full.png)
@@ -55,16 +77,15 @@ The above screenshot shows the index page of the API. This is the response from 
 
 
 ### Project TODO:
- - [x] Add screenshots to README
  - [ ] Add support for multiple servers to added to the web UI
  - [ ] Stick to a standard for logging errors, etc.
- - [x] Add support for logs to be seen through WebUI
  - [ ] Create a WebUI
  - [ ] Support at least RU and EN languages
  - [ ] Add authentication to WebUI by default (NO DEFAULT PASSWORDS)
 
 
-### API TODO:
+### TODO (Not in order of importance):
+ - [x] Add screenshots to README
  - [ ] Add authentication on API - Note: This will be done after V1.0.0
  - [x] Add support for a yaml config
  - [x] Be able to get the server's country from the IP
@@ -81,6 +102,7 @@ The above screenshot shows the index page of the API. This is the response from 
  - [x] CPU temperature
  - [ ] GPU temperature
  - [ ] GPU Usage
+ - [ ] Auto-updating option
  - [ ] Allow selecting specific flag type (twitter, equal height, equal width, etc.)
  - [x] Make the API easier to parse
  - [ ] System time and timezone
