@@ -65,12 +65,11 @@ func downloadIPDB() error { // todo IMPROVE THIS, 1ST PRIORITY
 
 	// return nil if no errors
 	log.Infof("The IP database has been successfully downloaded to %s", destFilePath)
-
 	return nil
 
 }
 
-func countryFromIP(ipAddress string) string {
+func countryFromIP(ipAddress string) string { // TODO: THIS FUNCTION HAS AN ERROR WHEN DOWNLOADING THE DATABASE AND THEN TRYING TO IMMEDIATELY READ IT. FIX THIS AS PRIORITY 1.
 	// put path together todo
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
@@ -83,7 +82,7 @@ func countryFromIP(ipAddress string) string {
 	db, err := maxminddb.Open(dbPath)
 	if err != nil {
 		log.Errorf("CFIP: Err: %s", err)
-		// assume not found, download it todo
+		// assume not found, download it
 		err = downloadIPDB()
 		if err != nil {
 			log.Fatal("Unable to download the IPDB database. Error: ", err)
