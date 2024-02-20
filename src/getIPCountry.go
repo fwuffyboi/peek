@@ -1,7 +1,12 @@
 package main
 
 import (
+	"fmt"
+	"io"
 	"net"
+	"net/http"
+	"os"
+	"path/filepath"
 
 	"github.com/oschwald/maxminddb-golang"
 	log "github.com/sirupsen/logrus"
@@ -62,8 +67,7 @@ func downloadIPDB() error { // todo IMPROVE THIS, 1ST PRIORITY
 	log.Infof("The IP database has been successfully downloaded to %s", destFilePath)
 
 	return nil
-	
-	
+
 }
 
 func countryFromIP(ipAddress string) string {
