@@ -32,7 +32,7 @@ Then just run the command `peek` in your terminal to start. You can now access t
 
 ⚠️⚠️⚠️⚠️⚠️
 
-**WARNING: Currently, Peek does not have any authentication. This means that anyone on your server's local network can access the server's API, and they _WILL_ be able access _ALL_ statistics and endpoints that are enabled in the configuration file. However, the default configuration is considered to be a "Safe default", allowing anyone on the local network to _ONLY_ view the logs of Peek (This is not sensitive information) or be able to see system information EXCEPT the server's public IP address. No actions (such as shutting the server down, or stopping peek) can be taked from the API on these defaults.** 
+**WARNING: Currently, Peek does not have any authentication. This means that anyone on your server's local network can access the server's API, and they _WILL_ be able access _ALL_ statistics and endpoints that are enabled in the configuration file. However, the default configuration is considered to be a "Safe default", allowing anyone on the local network to _ONLY_ view the logs of Peek (This is not sensitive information) or be able to see system information EXCEPT the server's public IP address. No actions (such as shutting the server down, or stopping peek) can be taken from the API on these defaults.** 
 
 ⚠️⚠️⚠️⚠️⚠️
 
@@ -114,6 +114,7 @@ The above screenshot shows the index page of the API. This is the response from 
  - [ ] Be able to see if a certain port on the local network is responsive (ping)
  - [x] Be able to see the logs of Peek
  - [ ] Improve viewing the logs of Peek
+ - [ ] Be able to see the config from api
  - [ ] Be able to see the logs of systemd processes
  - [x] Only ever return JSON from the whole API, no HTML
  - [ ] Be able to download the IP database if not present (from GitHub)
