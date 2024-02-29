@@ -13,7 +13,7 @@ auth:
   password: toor               # PASSWORD IS STORED IN PLAIN TEXT!!!! TODO
 
 logging:
-  log-level: "INFO"            # The log level to use. See the README.md for more info. Default: "INFO" TODO
+  log-level: "INFO"            # The log level to use. See the README.md for more info. Default: "INFO"
   log-file: "peek.log"         # The log file to use. Default: peek.log TODO
 
 api:

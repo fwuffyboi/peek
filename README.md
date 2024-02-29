@@ -41,6 +41,14 @@ Then just run the command `peek` in your terminal to start. You can now access t
 
 To configure Peek, you must first run the application after moving it to /usr/local/bin/peek. This will create a default confiiguration in /home/{YOUR_USERNAME}/.config/peek called peek.config.yaml. It is recommended to stop the Peek application before editing this, as that can lead to unsaved changes. Once edited, start Peek again and it will load your new configuration. If there is an issue with it not working, please feel free to create a GitHub issue.
 
+### Logging level
+
+Peek allows you to choose what level of logging you would prefer.
+The default is INFO, this shows most information that users would care about, and is very helpful if something goes wrong. This is the recommended option.
+
+There are also the other options: WARN, ERR and FATA.
+
+WARN only shows warnings in the program, and isnt very helpful. ERR only shows errors, and FATA only shows what caused a program to stop running. It is highly recommended to stick to the default. As this shows information that is critically helpful during debugging.
 
 # How to uninstall
 
