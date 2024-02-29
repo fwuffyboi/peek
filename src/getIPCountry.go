@@ -69,8 +69,8 @@ func downloadIPDB() error { // todo IMPROVE THIS, 1ST PRIORITY
 
 }
 
-func countryFromIP(ipAddress string) string { // TODO: THIS FUNCTION HAS AN ERROR WHEN DOWNLOADING THE DATABASE AND THEN TRYING TO IMMEDIATELY READ IT. FIX THIS AS PRIORITY 1.
-	// put path together todo
+func countryFromIP(ipAddress string) string {
+	// put path together
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatalf("CFIP: Error getting home dir. Err: %s", err)
@@ -78,27 +78,23 @@ func countryFromIP(ipAddress string) string { // TODO: THIS FUNCTION HAS AN ERRO
 	}
 	dbPath := filepath.Join(homeDir, ".config/peek/dbip-country-lite-2023-11.mmdb")
 
-	// try to access db
-	db, err := maxminddb.Open(dbPath)
+	// check with os.stat
+	_, err = os.Open(dbPath)
 	if err != nil {
-		log.Errorf("CFIP: Err: %s", err)
-		// assume not found, download it
+		// download file
 		err = downloadIPDB()
 		if err != nil {
 			log.Fatal("Unable to download the IPDB database. Error: ", err)
 		}
+
 	}
-	defer func(db *maxminddb.Reader) {
-		err := db.Close()
-		if err != nil {
-			log.Errorf("CFIP: Error defering. err: %s", err)
-		}
-	}(db)
-	// try again
-	db, err = maxminddb.Open(dbPath)
+
+	// try to access db
+	db, err := maxminddb.Open(dbPath)
 	if err != nil {
-		log.Errorf("CFIP: Err: %s", err)
+		log.Fatalf("CFIP: Err: %s", err)
 	}
+
 	defer func(db *maxminddb.Reader) {
 		err := db.Close()
 		if err != nil {
@@ -106,6 +102,7 @@ func countryFromIP(ipAddress string) string { // TODO: THIS FUNCTION HAS AN ERRO
 		}
 	}(db)
 
+	// lookup ip and return values
 	var record struct {
 		Country struct {
 			ISOCode string `maxminddb:"iso_code"`
