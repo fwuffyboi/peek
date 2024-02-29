@@ -4,6 +4,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"path"
 
 	"github.com/sirupsen/logrus"
 )
@@ -16,7 +17,14 @@ func setupLogging() (*os.File, io.Writer, error) {
 	}
 
 	// Open or create the log file
-	file, err := os.OpenFile("peek.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	var logfileName string = config.Logging.LogFile
+	usrHomeDir, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatal("Could not get user's home directory.")
+	}
+
+	logfilePath := path.Join(usrHomeDir,".config/peek" ,  logfileName)
+	file, err := os.OpenFile(logfilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		return nil, nil, err
 	}

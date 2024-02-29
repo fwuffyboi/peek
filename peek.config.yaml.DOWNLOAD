@@ -14,7 +14,7 @@ auth:
 
 logging:
   log-level: "INFO"            # The log level to use. See the README.md for more info. Default: "INFO"
-  log-file: "peek.log"         # The log file to use. Default: peek.log TODO
+  log-file: "peek.log"         # The log file name to use. See the README.md for more info. Default: peek.log
 
 api:
   api-host: "0.0.0.0"          # The host to bind to. Default: 0.0.0.0

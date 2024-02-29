@@ -41,6 +41,11 @@ Then just run the command `peek` in your terminal to start. You can now access t
 
 To configure Peek, you must first run the application after moving it to /usr/local/bin/peek. This will create a default confiiguration in /home/{YOUR_USERNAME}/.config/peek called peek.config.yaml. It is recommended to stop the Peek application before editing this, as that can lead to unsaved changes. Once edited, start Peek again and it will load your new configuration. If there is an issue with it not working, please feel free to create a GitHub issue.
 
+### Log file
+
+The name of the log file in the Peek configuration file is what the log file will be called.
+The log file's location will remain in `/home/YOUR_USERNAME/.config/peek/`. This only changes the file's name. Nothing else. The default log file value is "peek.log".
+
 ### Logging level
 
 Peek allows you to choose what level of logging you would prefer.
