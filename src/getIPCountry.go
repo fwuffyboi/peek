@@ -12,7 +12,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func downloadIPDB() error { // todo IMPROVE THIS, 1ST PRIORITY
+func downloadIPDB() error {
 	// make directory .config/peek
 	log.Warn("downloadIPDB() has been called")
 	homeDir, err := os.UserHomeDir()
@@ -128,7 +128,23 @@ func countryFromIP(ipAddress string) string {
 			return "Unknown"
 		}
 	} else {
-		log.Infof("CFIP: IP: %s, Country: %s", ipAddress, record.Country.ISOCode)
-		return record.Country.ISOCode
+		if ipAddress == ServerIPAddress {
+			config, err := ConfigParser()
+			if err != nil {
+				log.Fatalf("CFIP: Failed to get config: %s", err)
+			}
+
+			if config.Show.ShowIP == false {
+				log.Infof("CFIP: IP: %s, Country: %s", "XXX.XXX.XXX.XXX", record.Country.ISOCode)
+				return record.Country.ISOCode
+			} else {
+				log.Infof("CFIP: IP: %s, Country: %s", ipAddress, record.Country.ISOCode)
+				return record.Country.ISOCode
+			}
+		} else {
+			log.Infof("CFIP: IP: %s, Country: %s", ipAddress, record.Country.ISOCode)
+			return record.Country.ISOCode
+		}
+
 	}
 }

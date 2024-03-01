@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/v3/cpu"
 	log "github.com/sirupsen/logrus"
 	"os"
 	"path/filepath"

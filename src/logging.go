@@ -5,6 +5,8 @@ import (
 	"log"
 	"os"
 	"path"
+	"runtime"
+	"strconv"
 
 	"github.com/sirupsen/logrus"
 )
@@ -17,17 +19,27 @@ func setupLogging() (*os.File, io.Writer, error) {
 	}
 
 	// Open or create the log file
-	var logfileName string = config.Logging.LogFile
+	var logfileName = config.Logging.LogFile
 	usrHomeDir, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatal("Could not get user's home directory.")
 	}
 
-	logfilePath := path.Join(usrHomeDir,".config/peek" ,  logfileName)
+	logfilePath := path.Join(usrHomeDir, ".config/peek", logfileName)
 	file, err := os.OpenFile(logfilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		return nil, nil, err
 	}
+
+	// make logrus add this thingy
+	logrus.SetReportCaller(true)
+	logrus.SetFormatter(&logrus.JSONFormatter{
+		CallerPrettyfier: func(frame *runtime.Frame) (function string, file string) {
+			fileName := path.Base(frame.File) + ":" + strconv.Itoa(frame.Line)
+			//return frame.Function, fileName
+			return "", fileName
+		},
+	})
 
 	// Set Logrus to use both the file and stdout as outputs
 	multiWriter := io.MultiWriter(file, os.Stdout)

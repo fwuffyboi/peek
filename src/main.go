@@ -20,8 +20,8 @@ const (
 	DefaultWebUiPort = 42649
 )
 
-var IpAddress = ""     // IP address of the server
-var ServerCountry = "" // Country of the server, based on IP
+var ServerIPAddress = "" // IP address of the server
+var ServerCountry = ""   // Country of the server, based on IP
 
 func main() {
 	// Setup logging and obtain the log file handle and multi-writer
@@ -70,10 +70,10 @@ func main() {
 	}
 
 	// Get the server ip and save into var
-	IpAddress = getIP()
+	ServerIPAddress = getIP()
 
 	log.Infof("Attempting to get server's country from IP address.")
-	ServerCountry = countryFromIP(IpAddress)
+	ServerCountry = countryFromIP(ServerIPAddress)
 
 	// Get IP and port to run webserver on
 	config, err = ConfigParser()
@@ -121,11 +121,12 @@ func runGin(host string, port int, ginRatelimit int) {
 
 	// Define routes
 	// INFO routes
-	r.GET("/", rl, func(c *gin.Context) { indexPage(c) })        // return the web ui
-	r.GET("/api/", rl, func(c *gin.Context) { apiEndpoints(c) }) // return all api endpoints
-
+	r.GET("/", rl, func(c *gin.Context) { indexPage(c) })              // return the web ui
+	r.GET("/api/", rl, func(c *gin.Context) { apiEndpoints(c) })       // return all api endpoints
+	r.GET("/api/heartbeat/", func(c *gin.Context) { apiHeartbeat(c) }) // return all stats
+	
 	// NOACTION routes
-	r.GET("/api/full/", rl, func(c *gin.Context) { apiFull(c) }) // Return all api/json info
+	r.GET("/api/stats/all", rl, func(c *gin.Context) { apiFull(c) }) // Return all api/json info
 
 	// NOACTION AUTH routes
 	r.GET("/api/logs/all/", rl, func(c *gin.Context) { apiLogs(c) }) // return everything in the logfile

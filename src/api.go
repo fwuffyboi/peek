@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path"
 	"strconv"
 	"strings"
 	"time"
@@ -14,12 +15,12 @@ import (
 // Show all API endpoints
 func apiEndpoints(c *gin.Context) {
 	endpoints := map[string]string{
-		"GET   /":             "Show information about Peek",
-		"GET   /api":          "Show all API endpoints",
-		"GET   /api/full":     "Show all API stats",
-		"GET   /api/logs/all": "Show all logs",
-		"POST  /api/stop":     "Stop Peek",
-		"POST  /api/shutdown": "Shutdown the server",
+		"GET   /":              "Show information about Peek",
+		"GET   /api":           "Show all API endpoints",
+		"GET   /api/stats/all": "Show all API stats",
+		"GET   /api/logs/all":  "Show all logs",
+		"POST  /api/stop":      "Stop Peek",
+		"POST  /api/shutdown":  "Shutdown the server",
 	}
 	// Send the JSON response
 	c.JSON(http.StatusOK, gin.H{"endpoints": endpoints})
@@ -127,14 +128,14 @@ func apiFull(c *gin.Context) {
 		ServerCountry = "This value is disabled."
 		serverFlag = "This value is disabled."
 	} else {
-		ServerCountry = countryFromIP(IpAddress)
+		ServerCountry = countryFromIP(ServerIPAddress)
 		serverFlag = "https://flagpedia.net/data/flags/emoji/twitter/256x256/" + strings.ToLower(ServerCountry) + ".png"
 	}
 
 	if config.Show.ShowIP == false {
 		serverIP = "This value is disabled."
 	} else {
-		serverIP = IpAddress
+		serverIP = ServerIPAddress
 	}
 
 	if config.Show.ShowRAM == false {
@@ -297,10 +298,14 @@ func apiLogs(c *gin.Context) {
 		return
 	}
 	if c.Query("download") == "true" {
-		c.FileAttachment("peek.log", "peek.log")
+		usrHome, _ := os.UserHomeDir()
+		peekLogPath := path.Join(usrHome, ".config/peek", "peek.log")
+		c.FileAttachment(peekLogPath, "peek.log")
 		return
 	} else {
-		fileContents, err := os.ReadFile("peek.log")
+		usrHome, _ := os.UserHomeDir()
+		peekLogPath := path.Join(usrHome, ".config/peek", "peek.log")
+		fileContents, err := os.ReadFile(peekLogPath)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"err": err,
@@ -309,4 +314,10 @@ func apiLogs(c *gin.Context) {
 		c.String(200, string(fileContents))
 	}
 
+}
+
+func apiHeartbeat(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"msg": "online.",
+	})
 }
