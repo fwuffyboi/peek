@@ -124,7 +124,7 @@ func runGin(host string, port int, ginRatelimit int) {
 	r.GET("/", rl, func(c *gin.Context) { indexPage(c) })              // return the web ui
 	r.GET("/api/", rl, func(c *gin.Context) { apiEndpoints(c) })       // return all api endpoints
 	r.GET("/api/heartbeat/", func(c *gin.Context) { apiHeartbeat(c) }) // return all stats
-	
+
 	// NOACTION routes
 	r.GET("/api/stats/all", rl, func(c *gin.Context) { apiFull(c) }) // Return all api/json info
 

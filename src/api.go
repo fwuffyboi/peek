@@ -19,6 +19,7 @@ func apiEndpoints(c *gin.Context) {
 		"GET   /api":           "Show all API endpoints",
 		"GET   /api/stats/all": "Show all API stats",
 		"GET   /api/logs/all":  "Show all logs",
+		"GET   /api/heartbeat": "Show if Peek is online/responsive",
 		"POST  /api/stop":      "Stop Peek",
 		"POST  /api/shutdown":  "Shutdown the server",
 	}
