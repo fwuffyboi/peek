@@ -109,6 +109,18 @@ func runGin(host string, port int, ginRatelimit int) {
 
 	gin.SetMode(gin.ReleaseMode) // set to production mode
 	r := gin.Default()           // create a gin router
+	r.Use(func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(200)
+			return
+		}
+
+		c.Next()
+	})
 	r.Use(ginlogrus.Logger(log.StandardLogger()), rl)
 
 	r.ForwardedByClientIP = true
