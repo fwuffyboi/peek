@@ -2,12 +2,14 @@ package main
 
 import (
 	"fmt"
-	log "github.com/sirupsen/logrus"
-	"gopkg.in/yaml.v3"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
+	"errors"
+
+	log "github.com/sirupsen/logrus"
+	"gopkg.in/yaml.v3"
 )
 
 type T struct {
@@ -70,17 +72,17 @@ func ConfigParser() (*T, error) {
 	cfFilePath := filepath.Join(homeDir, ".config/peek/peek.config.yaml")
 
 	// read
-	yamlFile, err := os.ReadFile(cfFilePath)
-	if err != nil {
+	if _, err := os.Stat(cfFilePath); errors.Is(err, os.ErrNotExist) {
+		// config does not exist or cant be accessed.
 		log.Warn("peek.config.yaml not found, creating...")
 		err = makeConfig()
 		if err != nil {
-			log.Fatalf("error creating config: %v", err)
+			log.Fatalf("Error creating default config file: %v", err)
 			return nil, fmt.Errorf("error creating config: %v", err)
 		}
 	}
 
-	yamlFile, err = os.ReadFile(cfFilePath)
+	yamlFile, err := os.ReadFile(cfFilePath)
 	if err != nil {
 		log.Fatalf("error reading YAML file: %v", err)
 		return nil, fmt.Errorf("error reading YAML file: %v", err)

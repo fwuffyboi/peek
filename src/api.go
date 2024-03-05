@@ -1,8 +1,6 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 	"os"
 	"os/exec"
@@ -10,6 +8,9 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	log "github.com/sirupsen/logrus"
 )
 
 // Show all API endpoints
@@ -93,9 +94,9 @@ func apiFull(c *gin.Context) {
 	var HCPUZone string
 	var CPUUse string
 
-	config, err := ConfigParser()
+	config, _ := ConfigParser()
 
-	if config.Show.ShowUptime == false {
+	if !config.Show.ShowUptime {
 		uptimeFullFriendly = "This value is disabled."
 		uptimeFullRaw = "This value is disabled."
 		uptimeSeconds = 0
@@ -104,20 +105,23 @@ func apiFull(c *gin.Context) {
 		uptimeSeconds = uptimeVar.Seconds()
 	}
 
-	if config.Show.ShowHostname == false {
+	if !config.Show.ShowHostname {
 		hostnameVar = "This value is disabled."
 	} else {
 		hostnameVar, err = os.Hostname()
+		if err != nil {
+			hostnameVar = "Error."
+		}
 	}
 
-	if config.Show.ShowClientCountry == false {
+	if !config.Show.ShowClientCountry {
 		clientCountry = "This value is disabled."
 		clientFlag = "This value is disabled."
 	} else {
 		cip := c.ClientIP()
-		if cip == "127.0.0.1" || cip == "0.0.0.0" {
-			clientFlag = "LOCALHOST"
-			clientCountry = "LOCALHOST"
+		if cip == "127.0.0.1" || cip == "0.0.0.0" || cip == "::1" {
+			clientFlag = "unknown"
+			clientCountry = "unknown"
 		} else {
 			clientCountry = countryFromIP(cip)
 			clientFlag = "https://flagpedia.net/data/flags/emoji/twitter/256x256/" + clientCountry + ".png"
@@ -125,7 +129,7 @@ func apiFull(c *gin.Context) {
 
 	}
 
-	if config.Show.ShowServerCountry == false {
+	if !config.Show.ShowServerCountry {
 		ServerCountry = "This value is disabled."
 		serverFlag = "This value is disabled."
 	} else {
@@ -133,13 +137,13 @@ func apiFull(c *gin.Context) {
 		serverFlag = "https://flagpedia.net/data/flags/emoji/twitter/256x256/" + strings.ToLower(ServerCountry) + ".png"
 	}
 
-	if config.Show.ShowIP == false {
+	if !config.Show.ShowIP {
 		serverIP = "This value is disabled."
 	} else {
 		serverIP = ServerIPAddress
 	}
 
-	if config.Show.ShowRAM == false {
+	if !config.Show.ShowRAM {
 		memoryTotal, memoryFree, memoryUsed, memoryUsedPercent = 0, 0, 0, 0
 	} else {
 		memoryTotal, memoryFree, memoryUsed, memoryUsedPercent, err = getMemoryUsage()
@@ -150,7 +154,7 @@ func apiFull(c *gin.Context) {
 		}
 	}
 
-	if config.Show.ShowCPUTemp == false {
+	if !config.Show.ShowCPUTemp {
 		HCPUTemp = "This value is disabled."
 		HCPUZone = "This value is disabled."
 	} else {
@@ -165,7 +169,7 @@ func apiFull(c *gin.Context) {
 			})
 		}
 	}
-	if config.Show.ShowCPUUsage == false {
+	if !config.Show.ShowCPUUsage {
 		CPUUse = "This value is disabled."
 	} else {
 		CPUUse, err = GetCPUUsage()
@@ -226,7 +230,7 @@ func apiShutdownServer(c *gin.Context) {
 			"err": err,
 		})
 	}
-	if config.Actions.SystemShutdown == false {
+	if !config.Actions.SystemShutdown {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"err": "This endpoint is disabled in the config.",
 		})
@@ -292,7 +296,7 @@ func stopPeek(c *gin.Context) {
 // Return the logs
 func apiLogs(c *gin.Context) {
 	config, _ := ConfigParser()
-	if config.Show.ShowLogsAPI == false {
+	if !config.Show.ShowLogsAPI {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"err": "This endpoint is disabled in the config.",
 		})
