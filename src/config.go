@@ -1,12 +1,12 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
-	"errors"
 
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v3"
