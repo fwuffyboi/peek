@@ -319,6 +319,6 @@ func apiLogs(c *gin.Context) {
 
 func apiHeartbeat(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
-		"msg": "online.",
+		"msg": "online",
 	})
 }
