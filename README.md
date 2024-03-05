@@ -123,16 +123,20 @@ The above screenshot shows the index page of the API. This is the response from 
  - [ ] Add a fallback if ipinfo.io doesn't work
  - [ ] Create a better way to get the server's IP
  - [ ] See open sessions (ssh, etc.) and who/where they are from
+ - [ ] Be able to login and run commands as a certain system user
  - [ ] Email if a certain stat gets to certain level
  - [ ] Be able to see if a certain port on the local network is responsive (ping)
  - [x] Be able to see the logs of Peek
  - [ ] Improve viewing the logs of Peek
  - [ ] Be able to see the config from api
+ - [ ] Be able to edit the config options from the api
  - [ ] Be able to see the logs of systemd processes
+ - [ ] Be able to remotely update
  - [x] Only ever return JSON from the whole API, no HTML
- - [ ] Be able to download the IP database if not present (from GitHub)
+ - [x] Be able to download the IP database if not present (from GitHub)
  - [ ] Be able to update the IP database if it is outdated
  - [ ] Be able to manually override the server's country
+ - [ ] Support IPV6 (TOP PRIORITY)
 
 
  - [ ] Release V1.0.0 once api is done (Without auth)
