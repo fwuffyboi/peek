@@ -89,12 +89,35 @@ The above screenshot shows the index page of the API. This is the response from 
 - [db-ip.com](https://db-ip.com) - IP-to-country geolocation database
 
 
-### Project TODO:
+### WebUI TODO:
  - [ ] Add support for multiple servers to added to the web UI
  - [ ] Stick to a standard for logging errors, etc.
  - [ ] Create a WebUI
  - [ ] Support at least RU and EN languages
  - [ ] Add authentication to WebUI by default (NO DEFAULT PASSWORDS)
+
+
+### API TODO for V1:
+ - [x] Add support for a yaml config
+ - [x] Be able to get the server's country from the IP
+ - [ ] Allow viewing every disk's usage
+ - [ ] Allow seeing RAID array information (cached, done every half-hour at most) (?might be removed?)
+ - [ ] Allow seeing the logs of Peek
+ - [ ] Allow editing/seeing the config from api
+ - [ ] Seeing the live system time and timezone
+ - [x] Ram usage
+ - [x] CPU usage
+ - [x] User friendly uptime
+ - [x] User unfriendly uptime
+ - [x] See hostname
+ - [x] Be able to shut down server
+ - [x] Custom rate limit to all API endpoints
+ - [x] Be able to stop Peek
+ - [x] CPU temperature
+ - [ ] CPU information
+ - [ ] RAM information (speed in MHz, idk what else)
+ - [ ] System information (What should this include?)
+ - [ ] Alerts endpoint (Info like new updates, etc.)
 
 
 ### TODO (Not in order of importance):
