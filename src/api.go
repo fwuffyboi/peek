@@ -283,26 +283,37 @@ func apiShutdownServer(c *gin.Context) {
 
 // Shutdown peek
 func stopPeek(c *gin.Context) {
-	if c.Request.Method != "POST" { // if not a post request
-		c.JSON(http.StatusMethodNotAllowed, gin.H{
-			"err": "To interact with this API endpoint, you must use a POST request.",
+	config, err := ConfigParser()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"err": "Failed to get config: " + err.Error(),
 		})
-	} else { // if is a post request
-		if c.Query("confirm") == "true" { // if ?confirm=true in url
-			c.JSON(http.StatusOK, gin.H{
-				"msg": c.ClientIP() + " has requested that Peek stops. Stopping this application NOW!",
-			}) // TODO: make this actually respond to client
-
-			log.Warnf("SHUTDOWN: %s has made a Peek shutdown request.", c.ClientIP())
-			log.Warn("Peek is shutting down...")
-			log.Fatal("Peek has been shut down due to a client's request (", c.ClientIP(), ").")
-
-		} else {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"err": "You must confirm the application shutdown by adding ?confirm=true to the url.",
+	}
+	if !config.Actions.ShutdownPeek {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"err": "This endpoint is disabled in the config.",
+		})
+	} else {
+		if c.Request.Method != "POST" { // if not a post request
+			c.JSON(http.StatusMethodNotAllowed, gin.H{
+				"err": "To interact with this API endpoint, you must use a POST request.",
 			})
-		}
+		} else { // if is a post request
+			if c.Query("confirm") == "true" { // if ?confirm=true in url
+				c.JSON(http.StatusOK, gin.H{
+					"msg": c.ClientIP() + " has requested that Peek stops. Stopping this application NOW!",
+				}) // TODO: make this actually respond to client
 
+				log.Warnf("SHUTDOWN: %s has made a Peek shutdown request.", c.ClientIP())
+				log.Warn("Peek is shutting down...")
+				log.Fatal("Peek has been shut down due to a client's request (", c.ClientIP(), ").")
+
+			} else {
+				c.JSON(http.StatusBadRequest, gin.H{
+					"err": "You must confirm the application shutdown by adding ?confirm=true to the url.",
+				})
+			}
+		}
 	}
 }
 

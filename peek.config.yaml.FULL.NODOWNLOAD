@@ -25,8 +25,8 @@ api:
   shutdown-delay: 5            # How many minutes to wait before shutting down the server? Default: 1
 
 actions:
-  shutdown-system: false       # Should a user be able to shut down the server? TODO
-  shutdown-peek: false         # Should a user be able to shut down peek? TODO
+  shutdown-system: false       # Should a user be able to shut down the server?
+  shutdown-peek: false         # Should a user be able to shut down peek?
 
 show:
   show-sys-specs: true         # Should the system specification info be shown? TODO
