@@ -57,6 +57,7 @@ type T struct {
 		ShowGPU           bool `yaml:"show-gpu"`
 		ShowLogsAPI       bool `yaml:"show-logs-api"`
 		ShowErrors        bool `yaml:"show-errors"`
+		ShowTimezone      bool `yaml:"show-timezone"`
 	} `yaml:"show"`
 }
 

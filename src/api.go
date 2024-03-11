@@ -41,6 +41,8 @@ type serverStruct struct {
 	ServerIP      string `json:"serverIP"`
 	ServerCountry string `json:"serverCountry"`
 	ServerFlag    string `json:"serverFlag"`
+	ServerTZ      string `json:"serverTimezone"`
+	ServerTime    string `json:"serverTime"`
 }
 type uptimeStruct struct {
 	UptimeSeconds          float64 `json:"uptime-seconds"`
@@ -93,6 +95,8 @@ func apiFull(c *gin.Context) {
 	var HCPUTemp string
 	var HCPUZone string
 	var CPUUse string
+	var serverTZ string
+	var serverTime string
 
 	config, _ := ConfigParser()
 
@@ -141,6 +145,13 @@ func apiFull(c *gin.Context) {
 		serverIP = "This value is disabled."
 	} else {
 		serverIP = ServerIPAddress
+	}
+	if !config.Show.ShowTimezone {
+		serverTZ = "This value is disabled."
+		serverTime = "This value is disabled."
+	} else {
+		serverTZ = serverTimezone()
+		serverTime = time.Now().Format("2006-01-02, 15:04:05")
 	}
 
 	if !config.Show.ShowRAM {
@@ -198,6 +209,8 @@ func apiFull(c *gin.Context) {
 			ServerIP:      serverIP,
 			ServerCountry: ServerCountry,
 			ServerFlag:    serverFlag,
+			ServerTZ:      serverTZ,
+			ServerTime:    serverTime,
 		},
 		Uptime: uptimeStruct{
 			UptimeSeconds:          uptimeSeconds,

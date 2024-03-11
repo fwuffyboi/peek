@@ -43,3 +43,4 @@ show:
   show-raid: true              # Should RAID status of disks be shown? TODO
   show-gpu: true               # Should the gpu related information be shown? TODO
   show-logs-api: true          # Should the logs be shown on the API?
+  show-timezone: true          # Should the server's timezone AND time be shown?
