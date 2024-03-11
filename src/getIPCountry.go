@@ -31,9 +31,9 @@ func downloadIPDB() error {
 	}
 
 	// download from GitHub
-	log.Infof("Downloading dbip-country-lite-2023-11.mmdb from GitHub...")
-	fileURL := "https://raw.githubusercontent.com/fwuffyboi/peek/master/src/assets/dbip-country-lite-2023-11.mmdb"
-	destFilePath := filepath.Join(homeDir, ".config/peek/dbip-country-lite-2023-11.mmdb")
+	log.Infof("Downloading dbip-country-lite-2024-03.mmdb from GitHub...")
+	fileURL := "https://raw.githubusercontent.com/fwuffyboi/peek/master/src/assets/dbip-country-lite-2024-03.mmdb"
+	destFilePath := filepath.Join(homeDir, ".config/peek/dbip-country-lite-2024-03.mmdb")
 
 	log.Info("Creating destination file...")
 	file, err := os.Create(destFilePath)
@@ -76,7 +76,7 @@ func countryFromIP(ipAddress string) string {
 		log.Fatalf("CFIP: Error getting home dir. Err: %s", err)
 		return "Unknown"
 	}
-	dbPath := filepath.Join(homeDir, ".config/peek/dbip-country-lite-2023-11.mmdb")
+	dbPath := filepath.Join(homeDir, ".config/peek/dbip-country-lite-2024-03.mmdb")
 
 	// check with os.stat
 	_, err = os.Open(dbPath)
