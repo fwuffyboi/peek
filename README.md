@@ -30,11 +30,11 @@ sudo rm -rf peek                                # Delete the unnecessary repo
 
 Then just run the command `peek` in your terminal to start. You can now access the server at its default port of `http://0.0.0.0:42649`.
 
-⚠️⚠️⚠️⚠️⚠️
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 **WARNING: Currently, Peek does not have any authentication. This means that anyone on your server's local network can access the server's API, and they _WILL_ be able to access _ALL_ statistics and endpoints that are enabled in the configuration file. However, the default configuration is considered to be a "Safe default", allowing anyone on the local network to _ONLY_ view the logs of Peek (This is not sensitive information) or be able to see system information EXCEPT the server's public IP address. No actions (such as shutting the server down, or stopping peek) can be taken from the API on these defaults.** 
 
-⚠️⚠️⚠️⚠️⚠️
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 
 ### How to configure
@@ -121,6 +121,7 @@ The above screenshot shows the index page of the API. This is the response from 
  - [ ] CPU information
  - [ ] System information (What should this include?)
  - [ ] Alerts endpoint (Info like new updates, etc.)
+ - [ ] Update version
 
 
 ### TODO (Not in order of importance):
