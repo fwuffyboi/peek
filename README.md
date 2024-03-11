@@ -5,7 +5,7 @@ Take a peek at your server's usage statistics.
 ### What is Peek?
 Peek is a simple and insanely fast utility tool designed for Linux servers that allows quick monitoring of server usage statistics.
 
-This application is designed to be used on a server, however it may also be used on a personal computer.
+This application is designed to be used on a linux server, however it may also be used on a (Linux-based) personal computer.
 
 
 ### Features
@@ -17,15 +17,15 @@ This application is designed to be used on a server, however it may also be used
 ### Installation
 To install Peek, you will need to have Go installed on your system. If you do not have Go installed, you can download it from [here](https://golang.org/dl/) (https://golang.org/dl).
 
-Once you have Go installed, you can install Peek by running the following commands in your directory of choosing:
+Once you have Go installed, you can install Peek by running this command:
 ```bash
 git clone https://github.com/fwuffyboi/peek.git # Clone the repo
-cd peek/src        # Go into the necessary directory
-go build -o peek . # Build the file
-sudo chmod +x peek # Make the file executable
-sudo mv peek /usr/local/bin/peek # Move the file to /usr/local/bin
-cd ../.. # Get out of the directory
-sudo rm -rf peek # Delete the unnecessary repo
+cd peek/src                                     # Go into the necessary directory
+go build -o peek .                              # Build the file
+sudo chmod +x peek                              # Make the file executable
+sudo mv peek /usr/local/bin/peek                # Move the file to /usr/local/bin
+cd ../..                                        # Get out of the directory
+sudo rm -rf peek                                # Delete the unnecessary repo
 ```
 
 Then just run the command `peek` in your terminal to start. You can now access the server at its default port of `http://0.0.0.0:42649`.
@@ -55,12 +55,14 @@ There are also the other options: WARN, ERR and FATA.
 
 WARN only shows warnings in the program, and isn't very helpful. ERR only shows errors, and FATA only shows what caused a program to stop running. It is highly recommended to stick to the default. As this shows information that is critically helpful during debugging.
 
-# How to uninstall
+### How to uninstall
 
 Run these commands after stopping the Peek application:
 ```bash
-sudo rm -rf /home/{YOUR_USERNAME}/.config/peek
 sudo rm -rf /usr/local/bin/peek
+
+# Only if you would like to delete the config directory too
+sudo rm -rf /home/{YOUR_USERNAME}/.config/peek
 ```
 
 
@@ -85,7 +87,7 @@ The above screenshot shows the index page of the API. This is the response from 
 
 
 ### Credits/Contributors
-- [fwuffyboi](https://github.com/fwuffyboi) - Creator, Documentation, API
+- [fwuffyboi(Эшли Карамель)](https://github.com/fwuffyboi) - Creator, Documentation, API
 - [db-ip.com](https://db-ip.com) - IP-to-country geolocation database
 
 
@@ -98,24 +100,25 @@ The above screenshot shows the index page of the API. This is the response from 
 
 
 ### API TODO for V1:
+ - [ ] Streamline the installation process to a single command.
  - [x] Add support for a yaml config
  - [x] Be able to get the server's country from the IP
  - [ ] Allow viewing every disk's usage
  - [ ] Allow seeing RAID array information (cached, done every half-hour at most) (?might be removed?)
- - [ ] Allow seeing the logs of Peek
- - [ ] Allow editing/seeing the config from api
+ - [x] Allow seeing the logs of Peek to a basic level
+ - [ ] Allow (at least) seeing the config from api
  - [ ] Seeing the live system time and timezone
  - [x] Ram usage
- - [x] CPU usage
+ - [ ] RAM information (speed in MHz, idk what else)
  - [x] User friendly uptime
  - [x] User unfriendly uptime
  - [x] See hostname
  - [x] Be able to shut down server
  - [x] Custom rate limit to all API endpoints
  - [x] Be able to stop Peek
+ - [x] CPU usage
  - [x] CPU temperature
  - [ ] CPU information
- - [ ] RAM information (speed in MHz, idk what else)
  - [ ] System information (What should this include?)
  - [ ] Alerts endpoint (Info like new updates, etc.)
 
@@ -146,7 +149,7 @@ The above screenshot shows the index page of the API. This is the response from 
  - [ ] Add a fallback if ipinfo.io doesn't work
  - [ ] Create a better way to get the server's IP
  - [ ] See open sessions (ssh, etc.) and who/where they are from
- - [ ] Be able to login and run commands as a certain system user
+ - [ ] Be able to log in and run commands as a certain system user
  - [ ] Email if a certain stat gets to certain level
  - [ ] Be able to see if a certain port on the local network is responsive (ping)
  - [x] Be able to see the logs of Peek
