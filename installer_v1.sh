@@ -1,7 +1,7 @@
 echo "Installing Peek!.."
 
 echo "Cloning the repo.."
-git clone https://github.com/fwuffyboi/peek.git peeky || echo "Failed to clone repo." && exit
+git clone https://github.com/fwuffyboi/peek.git peek || echo "Failed to clone repo." && exit
 cd peek/src || echo "Failed to cd into directory."
 
 echo "Building the application.."
