@@ -107,7 +107,7 @@ The above screenshot shows the index page of the API. This is the response from 
  - [ ] Allow seeing RAID array information (cached, done every half-hour at most) (?might be removed?)
  - [x] Allow seeing the logs of Peek to a basic level
  - [ ] Allow (at least) seeing the config from api
- - [ ] Seeing the live system time and timezone
+ - [x] Seeing the live system time and timezone
  - [x] Ram usage
  - [ ] RAM information (speed in MHz, idk what else)
  - [x] User friendly uptime
@@ -120,8 +120,9 @@ The above screenshot shows the index page of the API. This is the response from 
  - [x] CPU temperature
  - [ ] CPU information
  - [ ] System information (What should this include?)
- - [ ] Alerts endpoint (Info like new updates, etc.)
- - [ ] Update version
+ - [x] Alerts endpoint (Info like new updates, etc.)
+ - [x] Be able to see if updates are available for peek
+ - [ ] Be able to see if your os has updates available
 
 
 ### TODO (Not in order of importance):
