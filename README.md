@@ -120,9 +120,9 @@ The above screenshot shows the index page of the API. This is the response from 
  - [x] CPU temperature
  - [ ] CPU information
  - [ ] System information (What should this include?)
- - [x] Alerts endpoint (Info like new updates, etc.)
+ - [x] Alerts endpoint (Info like new updates, etc.) (Improved.)
  - [x] Be able to see if updates are available for peek
- - [ ] Be able to see if your os has updates available
+ - [ ] Be able to see if your os has updates available (support debian and fedora first)
 
 
 ### TODO (Not in order of importance):
