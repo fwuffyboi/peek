@@ -70,8 +70,7 @@ func CheckForPeekUpdate() {
 				log.Info("You are running the latest version!")
 			}
 
-			// else, sleep for 1 hour
-			log.Infof("No updates found, sleeping for 1 hour...")
+			log.Info("Will check for updates again in 1 hour...")
 		}
 
 		time.Sleep(1 * time.Hour)
