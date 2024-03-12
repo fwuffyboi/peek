@@ -16,13 +16,14 @@ import (
 // Show all API endpoints
 func apiEndpoints(c *gin.Context) {
 	endpoints := map[string]string{
-		"GET   /":              "Show information about Peek",
-		"GET   /api":           "Show all API endpoints",
-		"GET   /api/stats/all": "Show all API stats",
-		"GET   /api/logs/all":  "Show all logs",
-		"GET   /api/heartbeat": "Show if Peek is online/responsive",
-		"POST  /api/stop":      "Stop Peek",
-		"POST  /api/shutdown":  "Shutdown the server",
+		"GET   /":               "Show information about Peek",
+		"GET   /api/":           "Show all API endpoints",
+		"GET   /api/stats/all/": "Show all API stats",
+		"GET   /api/logs/all/":  "Show all logs",
+		"GET   /api/heartbeat/": "Show if Peek is online/responsive",
+		"POST  /api/stop/":      "Stop Peek",
+		"POST  /api/shutdown/":  "Shutdown the server",
+		"GET   /api/alerts/":    "Show all alerts",
 	}
 	// Send the JSON response
 	c.JSON(http.StatusOK, gin.H{"endpoints": endpoints})

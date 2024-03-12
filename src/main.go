@@ -15,7 +15,7 @@ import (
 // Define constants
 const (
 	DefaultWebUiAddr = "0.0.0.0:42649" // Address of the webserver, HAS to be in the format of: IP:PORT
-	VERSION          = "v0.8.4.2-rc"   // Version of Peek
+	VERSION          = "v0.8.4.3-rc"   // Version of Peek
 	DefaultWebUiHost = "0.0.0.0"
 	DefaultWebUiPort = 42649
 )
@@ -126,19 +126,18 @@ func runGin(host string, port int, ginRatelimit int) {
 		log.Fatalf("GIN: Failed to set trusted proxies: %s", err)
 	}
 
-	// Define routes
-	// INFO routes
-	r.GET("/", rl, func(c *gin.Context) { indexPage(c) })              // return the web ui
-	r.GET("/api/", rl, func(c *gin.Context) { apiEndpoints(c) })       // return all api endpoints
-	r.GET("/api/heartbeat/", func(c *gin.Context) { apiHeartbeat(c) }) // return all stats
+	// Define API paths
+	// Routes that are purely informational
+	r.GET("/", rl, func(c *gin.Context) { indexPage(c) })                  // return the web ui
+	r.GET("/api/", rl, func(c *gin.Context) { apiEndpoints(c) })           // return all api endpoints
+	r.GET("/api/heartbeat/", func(c *gin.Context) { apiHeartbeat(c) })     // return all stats
+	r.GET("/api/alerts/", rl, func(c *gin.Context) { apiReturnAlerts(c) }) // return all stats
 
-	// NOACTION routes
-	r.GET("/api/stats/all", rl, func(c *gin.Context) { apiFull(c) }) // Return all api/json info
+	// Routes that cannot take user input
+	r.GET("/api/stats/all/", rl, func(c *gin.Context) { apiFull(c) }) // Return all api/json info
+	r.GET("/api/logs/all/", rl, func(c *gin.Context) { apiLogs(c) })  // return everything in the logfile
 
-	// NOACTION AUTH routes
-	r.GET("/api/logs/all/", rl, func(c *gin.Context) { apiLogs(c) }) // return everything in the logfile
-
-	// ACTION routes
+	// Routes that requite user input
 	r.POST("/api/shutdown/", rl, func(c *gin.Context) { apiShutdownServer(c) }) // shutdown the server
 	r.POST("/api/stop/", rl, func(c *gin.Context) { stopPeek(c) })              // stop the peek application
 
@@ -159,5 +158,5 @@ func runGin(host string, port int, ginRatelimit int) {
 	err = r.Run(fmt.Sprintf("%s:%d", host, port))
 	if err != nil {
 		log.Fatalf("GIN: Failed to start the Peek WebServer: %s", err)
-	} // listen and serve
+	}
 }
