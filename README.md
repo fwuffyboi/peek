@@ -66,7 +66,7 @@ sudo rm -rf /home/{YOUR_USERNAME}/.config/peek
 ```
 
 
-### Screenshots
+### Screenshots (v0.0.1 - These are not up to date)
 ![Screenshot](/src/assets/readme/ss-api-full.png)
 
 The above screenshot shows the full API response from the server located at `/api/stats/all`.
