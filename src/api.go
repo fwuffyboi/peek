@@ -64,13 +64,14 @@ type cpuStruct struct {
 	CPUUsage          string `json:"cpuUsage"`
 }
 type apiFullResponse struct {
-	Application applicationStruct `json:"application"`
-	Client      clientStruct      `json:"client"`
-	Server      serverStruct      `json:"server"`
-	Uptime      uptimeStruct      `json:"uptime"`
-	Hostname    hostnameStruct    `json:"hostname"`
-	Memory      memoryStruct      `json:"memory"`
-	CPU         cpuStruct         `json:"cpu"`
+	Application applicationStruct    `json:"application"`
+	Client      clientStruct         `json:"client"`
+	Server      serverStruct         `json:"server"`
+	Uptime      uptimeStruct         `json:"uptime"`
+	Hostname    hostnameStruct       `json:"hostname"`
+	Memory      memoryStruct         `json:"memory"`
+	CPU         cpuStruct            `json:"cpu"`
+	Alerts      map[string]time.Time `json:"alerts"`
 }
 
 // Show all API stats
@@ -231,6 +232,7 @@ func apiFull(c *gin.Context) {
 			ZoneOfHighestTemp: HCPUZone,
 			CPUUsage:          CPUUse,
 		},
+		Alerts: getAlerts(),
 	})
 
 }

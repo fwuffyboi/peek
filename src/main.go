@@ -15,13 +15,15 @@ import (
 // Define constants
 const (
 	DefaultWebUiAddr = "0.0.0.0:42649" // Address of the webserver, HAS to be in the format of: IP:PORT
-	VERSION          = "0.8.2-rc"      // Version of Peek
+	VERSION          = "v0.8.4-rc"     // Version of Peek
 	DefaultWebUiHost = "0.0.0.0"
 	DefaultWebUiPort = 42649
 )
 
 var ServerIPAddress = "" // IP address of the server
 var ServerCountry = ""   // Country of the server, based on IP
+
+var alertsList = make(map[string]time.Time) // List of alerts
 
 func main() {
 	// Setup logging and obtain the log file handle and multi-writer
@@ -59,15 +61,8 @@ func main() {
 		log.Fatal("This program only supports Linux distributions.")
 	}
 
-	// check auth level
-	log.Info("Checking auth level...")
-	config, err := ConfigParser()
-	if err != nil {
-		log.Fatalf("Failed to get config: %s", err)
-	}
-	if config.Auth.AuthLevel > 2 || config.Auth.AuthLevel < 0 {
-		log.Fatalf("Auth level is invalid. Auth level must be between 0 and 2. Auth level is: %d", config.Auth.AuthLevel)
-	}
+	// start the update checker thread
+	go CheckForPeekUpdate()
 
 	// Get the server ip and save into var
 	ServerIPAddress = getIP()
@@ -76,7 +71,7 @@ func main() {
 	ServerCountry = countryFromIP(ServerIPAddress)
 
 	// Get IP and port to run webserver on
-	config, err = ConfigParser()
+	config, err := ConfigParser()
 	if err != nil {
 		log.Fatalf("Failed to get config: %s", err)
 	}
