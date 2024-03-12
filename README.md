@@ -7,11 +7,11 @@ Peek is a simple and insanely fast utility tool designed for Linux servers that 
 
 This application is designed to be used on a linux server, however it may also be used on a (Linux-based) personal computer.
 
-
-### Features
-- [x] Insanely fast
+### Features (stats are accurate for Fedora Linux on Peek version 0.8.4-beta)
+- [x] Insanely fast (approximately 4.5ms per request for _every_ stat enabled.)
+- [x] Crazy small (Only 7.3MB for the config folder (without a log file) and 11.6MB for the executable) 
 - [x] Simple to use
-- [x] Easy to configure (It's just a yaml file)
+- [x] Easy to configure (It's just a yaml file in your config directory)
 
 
 ### Installation
