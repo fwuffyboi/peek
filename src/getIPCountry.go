@@ -135,7 +135,7 @@ func countryFromIP(ipAddress string) string {
 			}
 
 			if !config.Show.ShowIP {
-				log.Infof("CFIP: IP: %s, Country: %s", "XXX.XXX.XXX.XXX", record.Country.ISOCode)
+				log.Infof("CFIP: IP: %s, Country: %s", "xxx.xxx.xxx.xxx", record.Country.ISOCode)
 				return record.Country.ISOCode
 			} else {
 				log.Infof("CFIP: IP: %s, Country: %s", ipAddress, record.Country.ISOCode)
