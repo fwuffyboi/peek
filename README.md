@@ -123,6 +123,7 @@ The above screenshot shows the index page of the API. This is the response from 
  - [x] Alerts endpoint (Info like new updates, etc.) (Improved.)
  - [x] Be able to see if updates are available for peek
  - [ ] Be able to see if your os has updates available (support debian and fedora first)
+ - [ ] IP whitelist and blacklist for API endpoint access
 
 
 ### TODO (Not in order of importance):
