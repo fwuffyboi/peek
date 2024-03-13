@@ -91,14 +91,6 @@ The above screenshot shows the index page of the API. This is the response from 
 - [db-ip.com](https://db-ip.com) - IP-to-country geolocation database
 
 
-### WebUI TODO:
- - [ ] Add support for multiple servers to added to the web UI
- - [ ] Stick to a standard for logging errors, etc.
- - [ ] Create a WebUI
- - [ ] Support at least RU and EN languages
- - [ ] Add authentication to WebUI by default (NO DEFAULT PASSWORDS)
-
-
 ### API TODO for V1:
  - [ ] Streamline the installation process to a single command.
  - [x] Add support for a yaml config
