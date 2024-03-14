@@ -111,7 +111,7 @@ The above screenshot shows the index page of the API. This is the response from 
  - [x] Be able to stop Peek
  - [x] CPU usage
  - [x] CPU temperature
- - [ ] CPU information
+ - [x] CPU information
  - [ ] System information (What should this include?)
  - [x] Alerts endpoint (Info like new updates, etc.) (Improved.)
  - [x] Be able to see if updates are available for peek
