@@ -101,6 +101,7 @@ The above screenshot shows the index page of the API. This is the response from 
  - [ ] Allow (at least) seeing the config from api
  - [x] Seeing the live system time and timezone
  - [x] Ram usage
+ - [x] Swap usage
  - [ ] RAM information (speed in MHz, idk what else)
  - [x] User friendly uptime
  - [x] User unfriendly uptime
