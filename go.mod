@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/JGLTechnologies/gin-rate-limit v1.5.4
 	github.com/gin-gonic/gin v1.9.1
+	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
 	github.com/oschwald/maxminddb-golang v1.12.0
 	github.com/shirou/gopsutil/v3 v3.24.1
 	github.com/sirupsen/logrus v1.9.3

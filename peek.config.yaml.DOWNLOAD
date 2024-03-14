@@ -31,3 +31,10 @@ show:
   show-cpu-temp: true          # Should the temperature be shown?
   show-logs-api: true          # Should the logs be shown on the API?
   show-timezone: true          # Should the server's timezone AND time be shown?
+
+integrations:
+  telegram:
+    telegram-enabled:   false              # Should the telegram integration be enabled?
+    telegram-bot-token: "YOUR_TOKEN"       # The bot token for the telegram bot.
+    telegram-chat-id:   "YOUR_CHAT_ID"     # The chat id for the telegram bot.
+    telegram-message:   "Alert from Peek!: %alert%"  # The message to send to the telegram bot. %alert% will be replaced with the alert message.

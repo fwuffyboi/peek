@@ -59,6 +59,16 @@ type T struct {
 		ShowErrors        bool `yaml:"show-errors"`
 		ShowTimezone      bool `yaml:"show-timezone"`
 	} `yaml:"show"`
+
+	// integrations
+	Integrations struct {
+		Telegram struct {
+			Enabled          bool   `yaml:"telegram-enabled"`
+			TelegramBotToken string `yaml:"telegram-bot-token"`
+			TelegramChatID   string `yaml:"telegram-chat-id"`
+			TelegramMessage  string `yaml:"telegram-message"`
+		} `yaml:"telegram"`
+	}
 }
 
 // ConfigParser func for parsing the config file and returning all values
