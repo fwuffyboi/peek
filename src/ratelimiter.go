@@ -18,16 +18,16 @@ type RatelimitJson struct {
 }
 
 type Info struct {
-	Error     string `json:"Error"`
+	Error     string `json:"error"`
 	UITitle   string `json:"UITitle"`
 	UIMessage string `json:"UIMessage"`
 }
 
 type DebugInfo struct {
-	ResetTime string `json:"ResetTime"`
-	Limit     int    `json:"Limit"`
-	ClientIP  string `json:"ClientIP"`
-	ServerIP  string `json:"ServerIP"`
+	ResetTime string `json:"resetTime"`
+	Limit     int    `json:"limit"`
+	ClientIP  string `json:"clientIP"`
+	ServerIP  string `json:"serverIP"`
 }
 
 func rlErrorHandler(c *gin.Context, info ratelimit.Info) {
