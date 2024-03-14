@@ -62,14 +62,16 @@ Run these commands after stopping the Peek application:
 sudo rm -rf /usr/local/bin/peek
 
 # Only if you would like to delete the config directory too
+# The config directory stores the configuration file, log file and the IP to country database
 sudo rm -rf /home/{YOUR_USERNAME}/.config/peek
 ```
 
 
-### Screenshots (v0.0.1 - These are not up to date)
+### Screenshots (From v0.8.7-alpha)
 ![Screenshot](/src/assets/readme/ss-api-full.png)
+URL: `/api/stats/all`
 
-The above screenshot shows the full API response from the server located at `/api/stats/all`.
+The above screenshot shows the full API response from the server.
 This is the most detailed response you can get from the API. Below is shown an example of what peek would log for this request.
 I request the /api/stats/all endpoint from my Pixel 6a device on IP 192.168.0.57, to my server at 192.168.0.80. The server's hostname is fedorable.
 
@@ -78,10 +80,12 @@ I request the /api/stats/all endpoint from my Pixel 6a device on IP 192.168.0.57
 This request took 4ms(precisely 4.029865ms) total to complete. This includes getting all the data, reverse geolocating the IP, etc., and sending the response back to the client.
 
 ![Screenshot](/src/assets/readme/ss-api-endpoints.png)
+URL: `/api/`
 
-The above screenshot shows the API endpoints available to the client. This is the response from the `/api/` endpoint.
+The above screenshot shows the API endpoints available to the client.
 
 ![Screenshot](/src/assets/readme/ss-api-index.png)
+URL: `/`
 
 The above screenshot shows the index page of the API. This is the response from the `/` endpoint.
 
@@ -122,7 +126,7 @@ The above screenshot shows the index page of the API. This is the response from 
 ### TODO (Not in order of importance):
  - [ ] Migrate logger to use a database file, which would allow for finer control over the logs
  - [x] Add screenshots to README
- - [ ] Add authentication on API - Note: This will be done after V1.0.0
+ - [ ] Add authentication on API
  - [x] Add support for a yaml config
  - [x] Be able to get the server's country from the IP
  - [x] Allow viewing disk storage
@@ -153,7 +157,8 @@ The above screenshot shows the index page of the API. This is the response from 
  - [x] Be able to see the logs of Peek
  - [ ] Improve viewing the logs of Peek
  - [ ] Be able to see the config from api
- - [ ] Be able to edit the config options from the api
+ - [ ] Be able to edit the config from the api
+ - [ ] Be able to upload a config to the api
  - [ ] Be able to see the logs of systemd processes
  - [ ] Be able to remotely update peek
  - [x] Only ever return JSON from the whole API, no HTML
