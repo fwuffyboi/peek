@@ -119,6 +119,7 @@ The above screenshot shows the index page of the API. This is the response from 
 
 
 ### TODO (Not in order of importance):
+ - [ ] Migrate logger to use a database file, which would allow for finer control over the logs
  - [x] Add screenshots to README
  - [ ] Add authentication on API - Note: This will be done after V1.0.0
  - [x] Add support for a yaml config
