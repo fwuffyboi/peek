@@ -36,7 +36,7 @@ show:
   show-client-country: true    # Should the client country be shown?
   show-uptime: true            # Should the uptime be shown?
   show-ram: true               # Should the ram usage be shown?
-  show-cpu: true               # Should cpu related information be shown? TODO
+  show-cpu: true               # Should cpu related information be shown?
   show-cpu-use: true           # Should the cpu usage be shown?
   show-disk: true              # Should disk related information be shown?
   show-cpu-temp: true          # Should the temperature be shown?

@@ -72,3 +72,18 @@ func GetCPUUsage() (string, error) {
 	log.Infof("[GCPU]   Average CPU Usage: %.2f%%", averageUsage)
 	return fmt.Sprintf("%.2f", averageUsage), nil
 }
+
+func getCPUInfo() (vendor string, model string, modelName string, cores int, mhz int, cacheSize int, err error) {
+	cpuInfo, err := cpu.Info()
+	if err != nil {
+		log.Error("Error getting CPU info: ", err)
+		return "", "", "", 0, 0, 0, err
+	}
+	vendor = cpuInfo[0].VendorID
+	model = cpuInfo[0].Model
+	modelName = cpuInfo[0].ModelName
+	cores = int(cpuInfo[0].Cores)
+	mhz = int(cpuInfo[0].Mhz)
+	cacheSize = int(cpuInfo[0].CacheSize)
+	return vendor, model, modelName, cores, mhz, cacheSize, nil
+}

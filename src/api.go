@@ -69,7 +69,14 @@ type memoryStruct struct {
 type cpuStruct struct {
 	HighestCPUTemp    string `json:"highestCPUTemp"`
 	ZoneOfHighestTemp string `json:"zoneOfHighestTemp"`
-	CPUUsage          string `json:"cpuUsage"`
+	CPUUsage          string `json:"usage"`
+
+	CPUVendor    string `json:"vendor"`
+	CPUModel     string `json:"model"`
+	CPUModelName string `json:"modelName"`
+	CPUCores     int    `json:"cores"`
+	CPUMhz       int    `json:"mhz"`
+	CPUCacheSize int    `json:"cacheSize"`
 }
 type apiFullResponse struct {
 	Application applicationStruct    `json:"application"`
@@ -117,6 +124,10 @@ func apiFull(c *gin.Context) {
 	var HCPUTemp string
 	var HCPUZone string
 	var CPUUse string
+
+	// CPU info
+	var CPUVendor, CPUModel, CPUModelName string
+	var CPUCores, CPUMhz, CPUCacheSize int
 
 	// time
 	var serverTZ string
@@ -228,6 +239,18 @@ func apiFull(c *gin.Context) {
 		}
 	}
 
+	if !config.Show.ShowCPU {
+		CPUVendor, CPUModel, CPUModelName, CPUCores, CPUMhz, CPUCacheSize = disabledValueText, disabledValueText, disabledValueText, 0, 0, 0
+	} else {
+		CPUVendor, CPUModel, CPUModelName, CPUCores, CPUMhz, CPUCacheSize, err = getCPUInfo()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"err": err,
+			})
+		}
+		log.Infof("CPU: Vendor: %s, Model: %s, Model Name: %s, Cores: %d, MHz: %d, Cache Size: %d", CPUVendor, CPUModel, CPUModelName, CPUCores, CPUMhz, CPUCacheSize)
+	}
+
 	// Send the JSON response
 	c.JSON(http.StatusOK, apiFullResponse{
 		Application: applicationStruct{
@@ -268,6 +291,13 @@ func apiFull(c *gin.Context) {
 			HighestCPUTemp:    HCPUTemp,
 			ZoneOfHighestTemp: HCPUZone,
 			CPUUsage:          CPUUse,
+
+			CPUVendor:    CPUVendor,
+			CPUModel:     CPUModel,
+			CPUModelName: CPUModelName,
+			CPUCores:     CPUCores,
+			CPUMhz:       CPUMhz,
+			CPUCacheSize: CPUCacheSize,
 		},
 		Alerts: getAlerts(),
 	})
