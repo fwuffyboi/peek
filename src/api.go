@@ -13,6 +13,9 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// constants
+const disabledValueText = "This value is disabled."
+
 // Show all API endpoints
 func apiEndpoints(c *gin.Context) {
 	endpoints := map[string]string{
@@ -30,8 +33,8 @@ func apiEndpoints(c *gin.Context) {
 }
 
 type applicationStruct struct {
-	ApplicationName    string `json:"applicationName"`
-	ApplicationVersion string `json:"applicationVersion"`
+	Name    string `json:"name"`
+	Version string `json:"version"`
 }
 type clientStruct struct {
 	ClientIP      string `json:"clientIP"`
@@ -54,10 +57,14 @@ type hostnameStruct struct {
 	Hostname string `json:"hostname"`
 }
 type memoryStruct struct {
-	MemoryTotal       uint64 `json:"memoryTotal"`
-	MemoryFree        uint64 `json:"memoryFree"`
-	MemoryUsed        uint64 `json:"memoryUsed"`
-	MemoryUsedPercent int    `json:"memoryUsedPercent"`
+	MemoryTotal       int `json:"memoryTotal"`
+	MemoryFree        int `json:"memoryFree"`
+	MemoryUsed        int `json:"memoryUsed"`
+	MemoryUsedPercent int `json:"memoryUsedPercent"`
+
+	SwapUsed        int `json:"swapUsed"`
+	SwapTotal       int `json:"swapTotal"`
+	SwapPercentUsed int `json:"swapPercentUsed"`
 }
 type cpuStruct struct {
 	HighestCPUTemp    string `json:"highestCPUTemp"`
@@ -84,27 +91,42 @@ func apiFull(c *gin.Context) {
 		})
 	}
 
-	// create all the var shit
+	// server uptime
 	var uptimeFullFriendly, uptimeFullRaw string
 	var uptimeSeconds float64
+
+	// hostname
 	var hostnameVar string
+
+	// client networking
 	var clientCountry string
-	var serverIP string
 	var clientFlag string
+
+	// server networking
+	var serverIP string
 	var serverFlag string
-	var memoryTotal, memoryFree, memoryUsed uint64
+
+	// memory/ram
+	var memoryTotal, memoryFree, memoryUsed int
 	var memoryUsedPercent int
+
+	// swap
+	var swapUse, swapTotal, swapPercentUsed int
+
+	// cpu
 	var HCPUTemp string
 	var HCPUZone string
 	var CPUUse string
+
+	// time
 	var serverTZ string
 	var serverTime string
 
 	config, _ := ConfigParser()
 
 	if !config.Show.ShowUptime {
-		uptimeFullFriendly = "This value is disabled."
-		uptimeFullRaw = "This value is disabled."
+		uptimeFullFriendly = disabledValueText
+		uptimeFullRaw = disabledValueText
 		uptimeSeconds = 0
 	} else {
 		uptimeFullFriendly, uptimeFullRaw = formatUptime(uptimeVar)
@@ -112,7 +134,7 @@ func apiFull(c *gin.Context) {
 	}
 
 	if !config.Show.ShowHostname {
-		hostnameVar = "This value is disabled."
+		hostnameVar = disabledValueText
 	} else {
 		hostnameVar, err = os.Hostname()
 		if err != nil {
@@ -121,8 +143,8 @@ func apiFull(c *gin.Context) {
 	}
 
 	if !config.Show.ShowClientCountry {
-		clientCountry = "This value is disabled."
-		clientFlag = "This value is disabled."
+		clientCountry = disabledValueText
+		clientFlag = disabledValueText
 	} else {
 		cip := c.ClientIP()
 		if cip == "127.0.0.1" || cip == "0.0.0.0" || cip == "::1" {
@@ -136,21 +158,21 @@ func apiFull(c *gin.Context) {
 	}
 
 	if !config.Show.ShowServerCountry {
-		ServerCountry = "This value is disabled."
-		serverFlag = "This value is disabled."
+		ServerCountry = disabledValueText
+		serverFlag = disabledValueText
 	} else {
 		ServerCountry = countryFromIP(ServerIPAddress)
 		serverFlag = "https://flagpedia.net/data/flags/emoji/twitter/256x256/" + strings.ToLower(ServerCountry) + ".png"
 	}
 
 	if !config.Show.ShowIP {
-		serverIP = "This value is disabled."
+		serverIP = disabledValueText
 	} else {
 		serverIP = ServerIPAddress
 	}
 	if !config.Show.ShowTimezone {
-		serverTZ = "This value is disabled."
-		serverTime = "This value is disabled."
+		serverTZ = disabledValueText
+		serverTime = disabledValueText
 	} else {
 		serverTZ = serverTimezone()
 		serverTime = time.Now().Format("2006-01-02, 15:04:05")
@@ -158,6 +180,7 @@ func apiFull(c *gin.Context) {
 
 	if !config.Show.ShowRAM {
 		memoryTotal, memoryFree, memoryUsed, memoryUsedPercent = 0, 0, 0, 0
+		swapPercentUsed, swapUse, swapTotal = 0, 0, 0
 	} else {
 		memoryTotal, memoryFree, memoryUsed, memoryUsedPercent, err = getMemoryUsage()
 		if err != nil {
@@ -165,11 +188,20 @@ func apiFull(c *gin.Context) {
 				"err": err,
 			})
 		}
+
+		// get swap too
+		swapUse, swapTotal, swapPercentUsed, err = getSwapUsage()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"err": err,
+			})
+
+		}
 	}
 
 	if !config.Show.ShowCPUTemp {
-		HCPUTemp = "This value is disabled."
-		HCPUZone = "This value is disabled."
+		HCPUTemp = disabledValueText
+		HCPUZone = disabledValueText
 	} else {
 		HCPUTemp, HCPUZone, err = GetHighestCPUTemp()
 		if HCPUTemp == "ERROR" || HCPUZone == "UNKNOWN" {
@@ -183,7 +215,7 @@ func apiFull(c *gin.Context) {
 		}
 	}
 	if !config.Show.ShowCPUUsage {
-		CPUUse = "This value is disabled."
+		CPUUse = disabledValueText
 	} else {
 		CPUUse, err = GetCPUUsage()
 		if CPUUse == "ERROR" {
@@ -199,8 +231,8 @@ func apiFull(c *gin.Context) {
 	// Send the JSON response
 	c.JSON(http.StatusOK, apiFullResponse{
 		Application: applicationStruct{
-			ApplicationName:    "Peek",
-			ApplicationVersion: VERSION,
+			Name:    "Peek",
+			Version: VERSION,
 		},
 		Client: clientStruct{
 			ClientIP:      c.ClientIP(),
@@ -227,6 +259,10 @@ func apiFull(c *gin.Context) {
 			MemoryFree:        memoryFree,
 			MemoryUsed:        memoryUsed,
 			MemoryUsedPercent: memoryUsedPercent,
+
+			SwapUsed:        swapUse,
+			SwapTotal:       swapTotal,
+			SwapPercentUsed: swapPercentUsed,
 		},
 		CPU: cpuStruct{
 			HighestCPUTemp:    HCPUTemp,
@@ -309,7 +345,7 @@ func stopPeek(c *gin.Context) {
 
 				log.Warnf("SHUTDOWN: %s has made a Peek shutdown request.", c.ClientIP())
 				log.Warn("Peek is shutting down...")
-				log.Fatal("Peek has been shut down due to a client's request (", c.ClientIP(), ").")
+				log.Fatalf("Peek has been shut down due to a client's request. Client's info: IP: %s, Country: %s", c.ClientIP(), countryFromIP(c.ClientIP()))
 
 			} else {
 				c.JSON(http.StatusBadRequest, gin.H{

@@ -14,10 +14,10 @@ import (
 
 // Define constants
 const (
-	DefaultWebUiAddr = "0.0.0.0:42649" // Address of the webserver, HAS to be in the format of: IP:PORT
-	VERSION          = "v0.8.4.3-beta" // Version of Peek
-	DefaultWebUiHost = "0.0.0.0"
-	DefaultWebUiPort = 42649
+	DefaultWebuiAddress = "0.0.0.0:42649" // Address of the webserver, HAS to be in the format of: IP:PORT
+	VERSION             = "v0.8.5-alpha"  // Version of Peek
+	DefaultWebUiHost    = "0.0.0.0"
+	DefaultWebUiPort    = 42649
 )
 
 var ServerIPAddress = "" // IP address of the server
@@ -51,7 +51,7 @@ func main() {
 	log.Info("(C) IP Geolocation by DB-IP, https://db-ip.com/")
 	log.Info("Peek is a program written by: @fwuffyboi (https://github.com/fwuffyboi)")
 
-	// Check os, if windows, panic, else continue
+	// Check os, if windows/darwin, panic, else continue
 	log.Info("Checking what operating system is in use...")
 	switch runtime.GOOS {
 	case "linux":
@@ -145,7 +145,7 @@ func runGin(host string, port int, ginRatelimit int) {
 	log.Info("Verifying Peek host and port...")
 	// if host equals nil, null or empty string, set to default
 	if host == "" || host == "null" || host == "nil" {
-		log.Warnf("Host(%s) is invalid, setting to default web UI address: %s", host, DefaultWebUiAddr)
+		log.Warnf("Host(%s) is invalid, setting to default web UI address: %s", host, DefaultWebuiAddress)
 		host = DefaultWebUiHost
 	}
 	// if port equals 0 or under 1025, set to default
