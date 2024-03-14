@@ -15,7 +15,7 @@ import (
 // Define constants
 const (
 	DefaultWebuiAddress = "0.0.0.0:42649" // Address of the webserver, HAS to be in the format of: IP:PORT
-	VERSION             = "v0.8.6-alpha"  // Version of Peek
+	VERSION             = "v0.8.7-alpha"  // Version of Peek
 	DefaultWebUiHost    = "0.0.0.0"
 	DefaultWebUiPort    = 42649
 )
