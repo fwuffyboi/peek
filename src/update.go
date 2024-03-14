@@ -64,7 +64,7 @@ func CheckForPeekUpdate() {
 				}
 
 			} else if relComp == 1 {
-				log.Infof("You are running a newer version than the latest release! How are you even doing this! Current: %s, Latest: %s", currentVersion, latestVersion)
+				log.Warnf("You are running a newer version than the latest release! How are you even doing this! Current: %s, Latest: %s", currentVersion, latestVersion)
 				addAlert("You are running a newer version than the latest release! How are you even doing this! Current: " + currentVersion + ", Latest: " + latestVersion)
 			} else {
 				log.Info("You are running the latest version!")
