@@ -87,7 +87,7 @@ The above screenshot shows the API endpoints available to the client.
 ![Screenshot](/src/assets/readme/ss-api-index.png)
 URL: `/`
 
-The above screenshot shows the index page of the API. This is the response from the `/` endpoint.
+The above screenshot shows the index page of the API.
 
 
 ### Credits/Contributors
