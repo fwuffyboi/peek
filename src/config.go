@@ -16,7 +16,7 @@ type T struct {
 	Auth struct {
 		AuthRequired bool   `yaml:"auth-required"`
 		AuthLevel    int    `yaml:"auth-level"`
-		User         string `yaml:"user"`
+		Username     string `yaml:"username"`
 		Password     string `yaml:"password"`
 	} `yaml:"auth"`
 

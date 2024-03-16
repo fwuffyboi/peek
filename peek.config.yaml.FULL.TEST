@@ -7,10 +7,10 @@
 # Any value ending in "TODO" is not yet implemented, but is planned to as a future feature.
 
 auth:
-  auth-required: true          # Is auth required for peek? If false, ALL auth is disabled. TODO
+  auth-required: true          # Is auth required for peek? If false, ALL auth is disabled.
   auth-level: 1                # The auth level used across peek. See the README.md for more info. Default: 1 TODO
-  user: root                   # username is stored in plain text. TODO
-  password: toor               # PASSWORD IS STORED IN PLAIN TEXT!!!! TODO
+  username: root                   # username is stored in plain text.
+  password: toor               # PASSWORD IS STORED IN PLAIN TEXT!!!!
 
 logging:
   log-level: "INFO"            # The log level to use. See the README.md for more info. Default: "INFO"

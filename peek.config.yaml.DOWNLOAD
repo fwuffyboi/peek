@@ -2,6 +2,11 @@
 # If this file is deleted, the application will create a new one with the default configuration values.
 # The configuration file for peek. This file is in YAML format. See the README.md(https://github.com/fwuffyboi/peek) for more info.
 
+auth:
+  auth-required: false         # Should authentication be required to access the API? Default: false
+  username: "peeky"            # The username to use for the API. Default: "peeky"
+  password: "weeky"            # The password to use for the API. Default: "weeky"
+
 logging:
   log-level: "INFO"            # The log level to use. See the README.md for more info. Default: "INFO"
   log-file: "peek.log"         # The log file name to use. See the README.md for more info. Default: peek.log

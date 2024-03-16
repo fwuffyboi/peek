@@ -18,7 +18,7 @@ const (
 	DefaultWebuiAddress = "0.0.0.0:42649" // Address of the webserver, HAS to be in the format of: IP:PORT
 
 	// VERSION Version of Peek
-	VERSION = "v0.9.0-alpha" // Version of Peek
+	VERSION = "v0.8.10-alpha" // Version of Peek
 
 	// DefaultWebUiHost Default host for the web UI, in case it is not provided/invalid in the config file
 	DefaultWebUiHost = "0.0.0.0"
@@ -30,6 +30,8 @@ var ServerIPAddress = "" // IP address of the server
 var ServerCountry = ""   // Country of the server, based on IP
 
 var alertsList = make(map[string]time.Time) // List of alerts
+
+var authTokens []string // List of auth tokens
 
 func main() {
 	// Setup logging and obtain the log file handle and multi-writer
@@ -154,6 +156,10 @@ func runGin(host string, port int, ginRatelimit int) {
 	// Routes that requite user input
 	r.POST("/api/shutdown/", rl, func(c *gin.Context) { apiShutdownServer(c) }) // shutdown the server
 	r.POST("/api/stop/", rl, func(c *gin.Context) { stopPeek(c) })              // stop the peek application
+
+	// Routes that deal with authentication
+	r.POST("/api/auth/create/session/", rl, func(c *gin.Context) { createSession(c) }) // create an auth token
+	r.POST("/api/auth/verify/session/", rl, func(c *gin.Context) { verifySession(c) }) // verify an auth token
 
 	// Serve the API
 	log.Info("Verifying Peek host and port...")
