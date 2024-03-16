@@ -92,7 +92,7 @@ type apiFullResponse struct {
 }
 
 // Show all API stats
-func apiFull(c *gin.Context) {
+func allStatsAPI(c *gin.Context) {
 	uptimeVar, err := getUptime()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

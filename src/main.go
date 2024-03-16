@@ -150,8 +150,8 @@ func runGin(host string, port int, ginRatelimit int) {
 	r.GET("/api/alerts/", rl, func(c *gin.Context) { apiReturnAlerts(c) }) // return all stats
 
 	// Routes that cannot take user input
-	r.GET("/api/stats/all/", rl, func(c *gin.Context) { apiFull(c) }) // Return all api/json info
-	r.GET("/api/logs/all/", rl, func(c *gin.Context) { apiLogs(c) })  // return everything in the logfile
+	r.GET("/api/stats/all/", rl, func(c *gin.Context) { allStatsAPI(c) }) // Return all api/json info
+	r.GET("/api/logs/all/", rl, func(c *gin.Context) { apiLogs(c) })      // return everything in the logfile
 
 	// Routes that requite user input
 	r.POST("/api/shutdown/", rl, func(c *gin.Context) { apiShutdownServer(c) }) // shutdown the server
