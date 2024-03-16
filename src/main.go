@@ -14,10 +14,16 @@ import (
 
 // Define constants
 const (
+	// DefaultWebuiAddress Default address for the web UI, in case it is not provided/invalid in the config file
 	DefaultWebuiAddress = "0.0.0.0:42649" // Address of the webserver, HAS to be in the format of: IP:PORT
-	VERSION             = "v0.8.8-alpha"  // Version of Peek
-	DefaultWebUiHost    = "0.0.0.0"
-	DefaultWebUiPort    = 42649
+
+	// VERSION Version of Peek
+	VERSION = "v0.9.0-alpha" // Version of Peek
+
+	// DefaultWebUiHost Default host for the web UI, in case it is not provided/invalid in the config file
+	DefaultWebUiHost = "0.0.0.0"
+	// DefaultWebUiPort Default port for the web UI, in case it is not provided/invalid in the config file
+	DefaultWebUiPort = 42649
 )
 
 var ServerIPAddress = "" // IP address of the server
@@ -104,6 +110,8 @@ func runGin(host string, port int, ginRatelimit int) {
 
 	gin.SetMode(gin.ReleaseMode) // set to production mode
 	r := gin.Default()           // create a gin router
+
+	// cors middleware
 	r.Use(func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
@@ -121,7 +129,13 @@ func runGin(host string, port int, ginRatelimit int) {
 	r.ForwardedByClientIP = true
 
 	// Set up trusted proxies
-	err := r.SetTrustedProxies([]string{"127.0.0.1"})
+	config, err := ConfigParser()
+	if err != nil {
+		log.Fatalf("Failed to get config: %s", err)
+	}
+
+	log.Infof("Trusted proxies: %v", config.Api.TrustedProxies)
+	err = r.SetTrustedProxies(config.Api.TrustedProxies)
 	if err != nil {
 		log.Fatalf("GIN: Failed to set trusted proxies: %s", err)
 	}

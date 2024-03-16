@@ -14,6 +14,16 @@ api:
 
   shutdown-delay: 1            # How many minutes to wait before shutting down the server? Default: 1
 
+  # The trusted proxies to use. Trusted proxies are IP addresses on the Public WAN or private LAN that are officially
+  # trusted by Peek to be able to forward and serve this page on behalf of this server. Use this if you are reverse-proxying
+  # as the server will trust the IP address of the proxy hence client information will actually be correct. This is a ]
+  # security feature more than anything else. If you are not reverse-proxying, you can leave this as is.
+  # Default: ["127.0.0.1", "localhost"]
+  trusted-proxies:
+    - "127.0.0.1"
+    # - "192.168.0.1"  # example 1
+    # - "192.168.0.47" # example 2
+
 actions:
   shutdown-system: false       # Should a user be able to shut down the server?
   shutdown-peek: false         # Should a user be able to shut down peek?

@@ -28,10 +28,11 @@ type T struct {
 
 	// api shit
 	Api struct {
-		ApiHost       string `yaml:"api-host"`
-		ApiPort       int    `yaml:"api-port"`
-		RateLimit     int    `yaml:"rate-limit"`
-		ShutdownDelay int    `yaml:"shutdown-delay"`
+		ApiHost        string   `yaml:"api-host"`
+		ApiPort        int      `yaml:"api-port"`
+		RateLimit      int      `yaml:"rate-limit"`
+		ShutdownDelay  int      `yaml:"shutdown-delay"`
+		TrustedProxies []string `yaml:"trusted-proxies"`
 	} `yaml:"api"`
 
 	// Action stuff?
