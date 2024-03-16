@@ -19,7 +19,7 @@ To install Peek, you will need to have Go installed on your system. If you do no
 
 Once you have Go installed, you can install Peek by running this command:
 ```bash
-git clone https://github.com/fwuffyboi/peek.git # Clone the repo
+git clone --branch v0.8.8-alpha https://github.com/fwuffyboi/peek.git # Clone the repo
 cd peek/src                                     # Go into the necessary directory
 go build -o peek .                              # Build the file
 sudo chmod +x peek                              # Make the file executable
