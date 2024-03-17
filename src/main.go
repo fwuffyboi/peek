@@ -18,7 +18,7 @@ const (
 	DefaultWebuiAddress = "0.0.0.0:42649" // Address of the webserver, HAS to be in the format of: IP:PORT
 
 	// VERSION Version of Peek
-	VERSION = "v0.8.12-alpha" // Version of Peek
+	VERSION = "v0.8.13-alpha" // Version of Peek
 
 	// DefaultWebUiHost Default host for the web UI, in case it is not provided/invalid in the config file
 	DefaultWebUiHost = "0.0.0.0"
@@ -115,6 +115,8 @@ func runGin(host string, port int, ginRatelimit int) {
 
 	// cors middleware
 	r.Use(func(c *gin.Context) {
+
+		// cors headers
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
@@ -124,6 +126,10 @@ func runGin(host string, port int, ginRatelimit int) {
 			return
 		}
 
+		// informational headers
+		c.Writer.Header().Set("Server", "Gin")
+
+		// continue to next middleware
 		c.Next()
 	})
 	r.Use(ginlogrus.Logger(log.StandardLogger()), rl)
