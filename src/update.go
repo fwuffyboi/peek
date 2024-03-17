@@ -47,8 +47,15 @@ func CheckForPeekUpdate() {
 			// if error, see if it's a ratelimit error.
 			if strings.Contains(string(body), "API rate limit exceeded") {
 				log.Warnf("GitHub API rate limit exceeded! Will check for updates again in 1 hour...")
+
+				// send alert
+				if _, ok := getAlerts()["GitHub API rate limit exceeded!"]; !ok {
+					addAlert("GitHub API rate limit exceeded!")
+				} else {
+					log.Info("Alert already sent, skipping...")
+				}
 			} else {
-				log.Errorf("Error unmarshalling JSON: %s", err)
+				log.Errorf("Unknown error unmarshalling JSON: %s", err)
 			}
 
 		} else {
@@ -74,7 +81,13 @@ func CheckForPeekUpdate() {
 
 				} else if relComp == 1 {
 					log.Warnf("You are running a newer version than the latest release! How are you even doing this! Current: %s, Latest: %s", currentVersion, latestVersion)
-					addAlert("You are running a newer version than the latest release! How are you even doing this! Current: " + currentVersion + ", Latest: " + latestVersion)
+
+					// check if alert already sent
+					if _, ok := getAlerts()["You are running a newer version than the latest release! How are you even doing this! Current: "+currentVersion+", Latest: "+latestVersion]; !ok {
+						addAlert("You are running a newer version than the latest release! Current: " + currentVersion + ", Latest: " + latestVersion)
+					} else {
+						log.Info("Alert already sent, skipping...")
+					}
 				} else {
 					log.Info("You are running the latest version!")
 				}
