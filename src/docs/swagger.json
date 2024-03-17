@@ -1,0 +1,271 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/": {
+            "get": {
+                "description": "Shows a page with information about what is running on this host:port combination as well as links to the Peek GitHub page, and what the copyright is.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "apiInfoGroup"
+                ],
+                "summary": "Shows a page with information about the Peek API",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    }
+                }
+            }
+        },
+        "/auth/create/session/": {
+            "post": {
+                "description": "Create a session token to interact with endpoints that require authentication",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "apiAuthGroup"
+                ],
+                "summary": "Create a session token",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Username",
+                        "name": "username",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Password",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Session created",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "No/Incorrect username OR password provided",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/heartbeat": {
+            "get": {
+                "description": "Shows a page with a very simple heartbeat message saying \"online\" to show that the server is online and responding to requests.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "apiInfoGroup"
+                ],
+                "summary": "Shows a page with a very simple heartbeat message",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    }
+                }
+            }
+        },
+        "/logs/all": {
+            "get": {
+                "description": "Returns the logfile in plain text",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "apiLogsGroup"
+                ],
+                "summary": "Returns the logfile in plain text",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "If true, the logfile will be downloaded",
+                        "name": "download",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The logfile is returned in plain text"
+                    },
+                    "400": {
+                        "description": "This endpoint is disabled in the config."
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/peek/alerts": {
+            "get": {
+                "description": "Returns all alerts",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "apiPeekGroup"
+                ],
+                "summary": "Returns all alerts",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/peek/shutdown": {
+            "post": {
+                "description": "Shuts down the server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "apiPeekGroup"
+                ],
+                "summary": "Shuts down the server",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The auth token to use to access this endpoint",
+                        "name": "token",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All stats are shown in JSON format"
+                    },
+                    "400": {
+                        "description": "This endpoint is disabled in the config."
+                    },
+                    "401": {
+                        "description": "Unauthorized/auth error, make a session first and use that token to access this endpoint"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/peek/stop": {
+            "post": {
+                "description": "Stop the Peek application",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "apiPeekGroup"
+                ],
+                "summary": "Stop the Peek application",
+                "responses": {
+                    "200": {
+                        "description": "All stats are shown in JSON format"
+                    },
+                    "400": {
+                        "description": "This endpoint is disabled in the config."
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/stats/all": {
+            "get": {
+                "description": "Shows every statistic on the server that is enabled in the configuration. This includes the server's IP, the server's country, the server's timezone, the server's time, the server's hostname, the server's uptime, the server's memory usage, the server's swap usage, the server's CPU usage, the server's CPU temperature, the server's CPU model, the server's CPU vendor, the server's CPU model name, the server's CPU cores, the server's CPU MHz, the server's CPU cache size, the client's IP, the client's country, the client's flag, and the server's flag.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "apiStatsGroup"
+                ],
+                "summary": "Shows every statistic on the server that is enabled in the configuration",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The auth token to use to access this endpoint",
+                        "name": "Authorization",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All stats are shown in JSON format"
+                    },
+                    "401": {
+                        "description": "Unauthorized/auth error, make a session first and use that token to access this endpoint"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    }
+                }
+            }
+        }
+    }
+}

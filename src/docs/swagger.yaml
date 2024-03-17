@@ -1,0 +1,189 @@
+info:
+  contact: {}
+paths:
+  /:
+    get:
+      consumes:
+      - application/json
+      description: Shows a page with information about what is running on this host:port
+        combination as well as links to the Peek GitHub page, and what the copyright
+        is.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "429":
+          description: Too Many Requests
+      summary: Shows a page with information about the Peek API
+      tags:
+      - apiInfoGroup
+  /auth/create/session/:
+    post:
+      description: Create a session token to interact with endpoints that require
+        authentication
+      parameters:
+      - description: Username
+        in: formData
+        name: username
+        required: true
+        type: string
+      - description: Password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Session created
+          schema:
+            type: string
+        "401":
+          description: No/Incorrect username OR password provided
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+      summary: Create a session token
+      tags:
+      - apiAuthGroup
+  /heartbeat:
+    get:
+      consumes:
+      - application/json
+      description: Shows a page with a very simple heartbeat message saying "online"
+        to show that the server is online and responding to requests.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "429":
+          description: Too Many Requests
+      summary: Shows a page with a very simple heartbeat message
+      tags:
+      - apiInfoGroup
+  /logs/all:
+    get:
+      consumes:
+      - application/json
+      description: Returns the logfile in plain text
+      parameters:
+      - description: If true, the logfile will be downloaded
+        in: query
+        name: download
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: The logfile is returned in plain text
+        "400":
+          description: This endpoint is disabled in the config.
+        "429":
+          description: Too Many Requests
+        "500":
+          description: Internal Server Error
+      summary: Returns the logfile in plain text
+      tags:
+      - apiLogsGroup
+  /peek/alerts:
+    get:
+      description: Returns all alerts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "429":
+          description: Too Many Requests
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Returns all alerts
+      tags:
+      - apiPeekGroup
+  /peek/shutdown:
+    post:
+      consumes:
+      - application/json
+      description: Shuts down the server
+      parameters:
+      - description: The auth token to use to access this endpoint
+        in: formData
+        name: token
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: All stats are shown in JSON format
+        "400":
+          description: This endpoint is disabled in the config.
+        "401":
+          description: Unauthorized/auth error, make a session first and use that
+            token to access this endpoint
+        "429":
+          description: Too Many Requests
+        "500":
+          description: Internal Server Error
+      summary: Shuts down the server
+      tags:
+      - apiPeekGroup
+  /peek/stop:
+    post:
+      consumes:
+      - application/json
+      description: Stop the Peek application
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: All stats are shown in JSON format
+        "400":
+          description: This endpoint is disabled in the config.
+        "429":
+          description: Too Many Requests
+        "500":
+          description: Internal Server Error
+      summary: Stop the Peek application
+      tags:
+      - apiPeekGroup
+  /stats/all:
+    get:
+      consumes:
+      - application/json
+      description: Shows every statistic on the server that is enabled in the configuration.
+        This includes the server's IP, the server's country, the server's timezone,
+        the server's time, the server's hostname, the server's uptime, the server's
+        memory usage, the server's swap usage, the server's CPU usage, the server's
+        CPU temperature, the server's CPU model, the server's CPU vendor, the server's
+        CPU model name, the server's CPU cores, the server's CPU MHz, the server's
+        CPU cache size, the client's IP, the client's country, the client's flag,
+        and the server's flag.
+      parameters:
+      - description: The auth token to use to access this endpoint
+        in: query
+        name: Authorization
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: All stats are shown in JSON format
+        "401":
+          description: Unauthorized/auth error, make a session first and use that
+            token to access this endpoint
+        "429":
+          description: Too Many Requests
+      summary: Shows every statistic on the server that is enabled in the configuration
+      tags:
+      - apiStatsGroup
+swagger: "2.0"

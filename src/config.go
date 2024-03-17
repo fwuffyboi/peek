@@ -33,6 +33,7 @@ type T struct {
 		RateLimit      int      `yaml:"rate-limit"`
 		ShutdownDelay  int      `yaml:"shutdown-delay"`
 		TrustedProxies []string `yaml:"trusted-proxies"`
+		SwaggerEnabled string   `yaml:"swagger-enabled"`
 	} `yaml:"api"`
 
 	// Action stuff?

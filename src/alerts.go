@@ -39,6 +39,17 @@ func getAlerts() map[string]time.Time {
 	return alertsList
 }
 
+// @Summary Returns all alerts
+// @Description Returns all alerts
+// @Produce json
+// @Success 200 {object} map[string]time.Time
+// @Failure 429
+// @Failure 500 {string} string "Internal Server Error"
+// @Tags apiPeekGroup
+// @Router /peek/alerts [get]
 func apiReturnAlerts(c *gin.Context) {
+
+	// todo: add auth check
+
 	c.JSON(200, getAlerts())
 }

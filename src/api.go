@@ -91,8 +91,38 @@ type apiFullResponse struct {
 	Alerts      map[string]time.Time `json:"alerts"`
 }
 
-// Show all API stats
+// @Summary Shows every statistic on the server that is enabled in the configuration
+// @Description  Shows every statistic on the server that is enabled in the configuration. This includes the server's IP, the server's country, the server's timezone, the server's time, the server's hostname, the server's uptime, the server's memory usage, the server's swap usage, the server's CPU usage, the server's CPU temperature, the server's CPU model, the server's CPU vendor, the server's CPU model name, the server's CPU cores, the server's CPU MHz, the server's CPU cache size, the client's IP, the client's country, the client's flag, and the server's flag.
+// @Accept  json
+// @Produce  json
+// @Success 200 "All stats are shown in JSON format"
+// @Failure 401 "Unauthorized/auth error, make a session first and use that token to access this endpoint"
+// @Failure 429
+// @param Authorization query string false "The auth token to use to access this endpoint"
+// @Tags apiStatsGroup
+// @Router /stats/all [get]
+// allStatsAPI Shows all API stats
 func allStatsAPI(c *gin.Context) {
+
+	// check if user requires auth
+	config, err := ConfigParser()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"err": err,
+		})
+		return // terminate completely
+	}
+
+	if config.Auth.AuthRequired {
+		if !isAuthed(c) {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"err": "Unauthorized",
+				"msg": "You must be authenticated to access this endpoint.",
+			})
+			return
+		}
+	}
+
 	uptimeVar, err := getUptime()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -134,8 +164,6 @@ func allStatsAPI(c *gin.Context) {
 	// time
 	var serverTZ string
 	var serverTime string
-
-	config, _ := ConfigParser()
 
 	if !config.Show.ShowUptime {
 		uptimeFullFriendly = disabledValueText
@@ -306,53 +334,66 @@ func allStatsAPI(c *gin.Context) {
 
 }
 
-// Shutdown the server
+// @Summary Shuts down the server
+// @Description Shuts down the server
+// @Accept  json
+// @Produce  json
+// @Success 200 "All stats are shown in JSON format"
+// @Failure 400 "This endpoint is disabled in the config."
+// @Failure 401 "Unauthorized/auth error, make a session first and use that token to access this endpoint"
+// @Failure 429
+// @Failure 500
+// @param token formData string false "The auth token to use to access this endpoint"
+// @Tags apiPeekGroup
+// @Router /peek/shutdown [post]
+// apiShutdownServer Shuts down the server
 func apiShutdownServer(c *gin.Context) {
 	config, err := ConfigParser()
 	if err != nil {
+		log.Errorf("Failed to get config: %s", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"err": err,
 		})
 	}
+
+	// todo: add auth check
+
 	if !config.Actions.SystemShutdown {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"err": "This endpoint is disabled in the config.",
 		})
+		return
 	} else {
-		if c.Request.Method != "POST" { // if not a posty requesty
-			c.JSON(http.StatusMethodNotAllowed, gin.H{
-				"err": "To interact with this API endpoint, you must use a POST request.",
+		shutdownDelay := config.Api.ShutdownDelay
+		log.Infof("API: Shutdown request received from client IP: %s at time: %s. Waiting with a delay of %d minutes until shutdown.",
+			c.ClientIP(), time.Now().Format("2006-01-02, 15:04:05"), shutdownDelay)
+		time.Sleep(time.Duration(shutdownDelay))
+		minArg := "+" + strconv.Itoa(shutdownDelay)
+		cmd := exec.Command("shutdown", "-P", minArg)
+
+		outputBytes, err := cmd.CombinedOutput()
+		if err != nil {
+			log.Errorf("Error shutting down: %s", err)
+		} else {
+			c.JSON(http.StatusOK, gin.H{
+				"msg":        c.ClientIP() + " has requested a server shutdown in " + strconv.Itoa(shutdownDelay) + " minutes.",
+				"cmd_output": string(outputBytes),
 			})
-		} else { // if is a posty requesty westy
-			if c.Query("confirm") == "true" { // if ?confirm=true in url
-				// shut down server!1!!! :3
-				shutdownDelay := config.Api.ShutdownDelay
-				log.Infof("API: Shutdown request received from client IP: %s at time: %s. Waiting with a delay of %d minutes until shutdown.",
-					c.ClientIP(), time.Now().Format("2006-01-02, 15:04:05"), shutdownDelay)
-				time.Sleep(time.Duration(shutdownDelay))
-				minArg := "+" + strconv.Itoa(shutdownDelay)
-				cmd := exec.Command("shutdown", "-P", minArg)
-
-				outputBytes, err := cmd.CombinedOutput()
-				if err != nil {
-					log.Errorf("Error shutting down: %s", err)
-				} else {
-					c.JSON(http.StatusOK, gin.H{
-						"msg":        c.ClientIP() + " has requested a server shutdown in " + strconv.Itoa(shutdownDelay) + " minutes.",
-						"cmd_output": string(outputBytes),
-					})
-				}
-
-			} else {
-				c.JSON(http.StatusBadRequest, gin.H{
-					"err": "You must confirm the shutdown by adding ?confirm=true to the url.",
-				})
-			}
 		}
 	}
 }
 
-// Shutdown peek
+// @Summary Stop the Peek application
+// @Description Stop the Peek application
+// @Accept  json
+// @Produce  json
+// @Success 200 "All stats are shown in JSON format"
+// @Failure 400 "This endpoint is disabled in the config."
+// @Failure 429
+// @Failure 500 "Internal Server Error"
+// @Tags apiPeekGroup
+// @Router /peek/stop [post]
+// stopPeek Stops the Peek application
 func stopPeek(c *gin.Context) {
 	config, err := ConfigParser()
 	if err != nil {
@@ -360,37 +401,41 @@ func stopPeek(c *gin.Context) {
 			"err": "Failed to get config: " + err.Error(),
 		})
 	}
+
+	// todo: add auth check
+
 	if !config.Actions.ShutdownPeek {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"err": "This endpoint is disabled in the config.",
 		})
 	} else {
-		if c.Request.Method != "POST" { // if not a post request
-			c.JSON(http.StatusMethodNotAllowed, gin.H{
-				"err": "To interact with this API endpoint, you must use a POST request.",
-			})
-		} else { // if is a post request
-			if c.Query("confirm") == "true" { // if ?confirm=true in url
-				c.JSON(http.StatusOK, gin.H{
-					"msg": c.ClientIP() + " has requested that Peek stops. Stopping this application NOW!",
-				}) // TODO: make this actually respond to client
+		c.JSON(http.StatusOK, gin.H{
+			"msg": c.ClientIP() + " has requested that Peek stops. Stopping this application NOW!",
+		}) // TODO: make this actually respond to client
 
-				log.Warnf("SHUTDOWN: %s has made a Peek shutdown request.", c.ClientIP())
-				log.Warn("Peek is shutting down...")
-				log.Fatalf("Peek has been shut down due to a client's request. Client's info: IP: %s, Country: %s", c.ClientIP(), countryFromIP(c.ClientIP()))
-
-			} else {
-				c.JSON(http.StatusBadRequest, gin.H{
-					"err": "You must confirm the application shutdown by adding ?confirm=true to the url.",
-				})
-			}
-		}
+		log.Warnf("SHUTDOWN: %s has made a Peek shutdown request.", c.ClientIP())
+		log.Warn("Peek is shutting down...")
+		log.Fatalf("Peek has been shut down due to a client's request. Client's info: IP: %s, Country: %s", c.ClientIP(), countryFromIP(c.ClientIP()))
 	}
 }
 
+// @Summary Returns the logfile in plain text
+// @Description Returns the logfile in plain text
+// @Accept  json
+// @Produce  json
+// @Success 200 "The logfile is returned in plain text"
+// @Failure 400 "This endpoint is disabled in the config."
+// @Failure 429
+// @Failure 500 "Internal Server Error"
+// @param download query bool false "If true, the logfile will be downloaded"
+// @Tags apiLogsGroup
+// @Router /logs/all [get]
 // Return the logs
 func apiLogs(c *gin.Context) {
 	config, _ := ConfigParser()
+
+	// todo: add auth check
+
 	if !config.Show.ShowLogsAPI {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"err": "This endpoint is disabled in the config.",
@@ -416,6 +461,14 @@ func apiLogs(c *gin.Context) {
 
 }
 
+// @Summary Shows a page with a very simple heartbeat message
+// @Description Shows a page with a very simple heartbeat message saying "online" to show that the server is online and responding to requests.
+// @Accept  json
+// @Produce  json
+// @Success 200
+// @Failure 429
+// @Tags apiInfoGroup
+// @Router /heartbeat [get]
 func apiHeartbeat(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"msg": "online",
