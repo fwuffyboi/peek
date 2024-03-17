@@ -125,6 +125,12 @@ const docTemplate = `{
                         "description": "If true, the logfile will be downloaded",
                         "name": "download",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "The auth token to use to access this endpoint",
+                        "name": "Authorization",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -153,6 +159,14 @@ const docTemplate = `{
                     "apiPeekGroup"
                 ],
                 "summary": "Returns all alerts",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The auth token to use to access this endpoint.",
+                        "name": "Authorization",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -163,20 +177,20 @@ const docTemplate = `{
                             }
                         }
                     },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
                     "429": {
                         "description": "Too Many Requests"
                     },
                     "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "Internal Server Error"
                     }
                 }
             }
         },
         "/peek/shutdown": {
-            "post": {
+            "put": {
                 "description": "Shuts down the server",
                 "consumes": [
                     "application/json"
@@ -192,8 +206,8 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "The auth token to use to access this endpoint",
-                        "name": "token",
-                        "in": "formData"
+                        "name": "Authorization",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -216,7 +230,7 @@ const docTemplate = `{
             }
         },
         "/peek/stop": {
-            "post": {
+            "put": {
                 "description": "Stop the Peek application",
                 "consumes": [
                     "application/json"
@@ -228,6 +242,14 @@ const docTemplate = `{
                     "apiPeekGroup"
                 ],
                 "summary": "Stop the Peek application",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The auth token to use to access this endpoint",
+                        "name": "Authorization",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "All stats are shown in JSON format"
@@ -260,7 +282,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "The auth token to use to access this endpoint",
+                        "description": "The auth token to use to access this endpoint.",
                         "name": "Authorization",
                         "in": "query"
                     }

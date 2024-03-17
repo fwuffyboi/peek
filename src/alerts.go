@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
+	"net/http"
 	"strings"
 	"time"
 )
@@ -43,13 +44,32 @@ func getAlerts() map[string]time.Time {
 // @Description Returns all alerts
 // @Produce json
 // @Success 200 {object} map[string]time.Time
+// @Failure 401
 // @Failure 429
-// @Failure 500 {string} string "Internal Server Error"
+// @Failure 500
 // @Tags apiPeekGroup
+// @param Authorization query string false "The auth token to use to access this endpoint."
 // @Router /peek/alerts [get]
 func apiReturnAlerts(c *gin.Context) {
 
-	// todo: add auth check
+	config, err := ConfigParser()
+	if err != nil {
+		log.Error("Error reading config file: ", err)
+		c.JSON(500, gin.H{"msg": "Internal Server Error"})
+		return
+	}
+
+	if config.Auth.AuthRequired {
+		if !isAuthed(c) {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"err": "Unauthorized",
+				"msg": "You must be authenticated to access this endpoint.",
+			})
+			return
+		}
+	}
 
 	c.JSON(200, getAlerts())
+	return
+
 }

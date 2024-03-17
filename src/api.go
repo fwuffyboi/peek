@@ -98,7 +98,7 @@ type apiFullResponse struct {
 // @Success 200 "All stats are shown in JSON format"
 // @Failure 401 "Unauthorized/auth error, make a session first and use that token to access this endpoint"
 // @Failure 429
-// @param Authorization query string false "The auth token to use to access this endpoint"
+// @param Authorization query string false "The auth token to use to access this endpoint."
 // @Tags apiStatsGroup
 // @Router /stats/all [get]
 // allStatsAPI Shows all API stats
@@ -343,9 +343,9 @@ func allStatsAPI(c *gin.Context) {
 // @Failure 401 "Unauthorized/auth error, make a session first and use that token to access this endpoint"
 // @Failure 429
 // @Failure 500
-// @param token formData string false "The auth token to use to access this endpoint"
+// @param Authorization query string false "The auth token to use to access this endpoint"
 // @Tags apiPeekGroup
-// @Router /peek/shutdown [post]
+// @Router /peek/shutdown [put]
 // apiShutdownServer Shuts down the server
 func apiShutdownServer(c *gin.Context) {
 	config, err := ConfigParser()
@@ -354,32 +354,43 @@ func apiShutdownServer(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"err": err,
 		})
+		return
 	}
-
-	// todo: add auth check
 
 	if !config.Actions.SystemShutdown {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"err": "This endpoint is disabled in the config.",
 		})
 		return
-	} else {
-		shutdownDelay := config.Api.ShutdownDelay
-		log.Infof("API: Shutdown request received from client IP: %s at time: %s. Waiting with a delay of %d minutes until shutdown.",
-			c.ClientIP(), time.Now().Format("2006-01-02, 15:04:05"), shutdownDelay)
-		time.Sleep(time.Duration(shutdownDelay))
-		minArg := "+" + strconv.Itoa(shutdownDelay)
-		cmd := exec.Command("shutdown", "-P", minArg)
+	}
 
-		outputBytes, err := cmd.CombinedOutput()
-		if err != nil {
-			log.Errorf("Error shutting down: %s", err)
-		} else {
-			c.JSON(http.StatusOK, gin.H{
-				"msg":        c.ClientIP() + " has requested a server shutdown in " + strconv.Itoa(shutdownDelay) + " minutes.",
-				"cmd_output": string(outputBytes),
+	if config.Auth.AuthRequired {
+		if !isAuthed(c) {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"err": "Unauthorized",
+				"msg": "You must be authenticated to access this endpoint.",
 			})
+			return
 		}
+	}
+
+	shutdownDelay := config.Api.ShutdownDelay
+	log.Infof("API: Shutdown request received from client IP: %s at time: %s. Waiting with a delay of %d minutes until shutdown.",
+		c.ClientIP(), time.Now().Format("2006-01-02, 15:04:05"), shutdownDelay)
+	time.Sleep(time.Duration(shutdownDelay))
+	minArg := "+" + strconv.Itoa(shutdownDelay)
+	cmd := exec.Command("shutdown", "-P", minArg)
+
+	outputBytes, err := cmd.CombinedOutput()
+	if err != nil {
+		log.Errorf("Error shutting down: %s", err)
+		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"msg":        c.ClientIP() + " has requested a server shutdown in " + strconv.Itoa(shutdownDelay) + " minutes.",
+			"cmd_output": string(outputBytes),
+		})
+		return
 	}
 }
 
@@ -392,7 +403,8 @@ func apiShutdownServer(c *gin.Context) {
 // @Failure 429
 // @Failure 500 "Internal Server Error"
 // @Tags apiPeekGroup
-// @Router /peek/stop [post]
+// @param Authorization query string false "The auth token to use to access this endpoint"
+// @Router /peek/stop [put]
 // stopPeek Stops the Peek application
 func stopPeek(c *gin.Context) {
 	config, err := ConfigParser()
@@ -402,21 +414,31 @@ func stopPeek(c *gin.Context) {
 		})
 	}
 
-	// todo: add auth check
-
 	if !config.Actions.ShutdownPeek {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"err": "This endpoint is disabled in the config.",
 		})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"msg": c.ClientIP() + " has requested that Peek stops. Stopping this application NOW!",
-		}) // TODO: make this actually respond to client
-
-		log.Warnf("SHUTDOWN: %s has made a Peek shutdown request.", c.ClientIP())
-		log.Warn("Peek is shutting down...")
-		log.Fatalf("Peek has been shut down due to a client's request. Client's info: IP: %s, Country: %s", c.ClientIP(), countryFromIP(c.ClientIP()))
+		return
 	}
+
+	if config.Auth.AuthRequired {
+		if !isAuthed(c) {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"err": "Unauthorized",
+				"msg": "You must be authenticated to access this endpoint.",
+			})
+			return
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"msg": c.ClientIP() + " has requested that Peek stops. Stopping this application NOW!",
+	}) // TODO: make this actually respond to client
+
+	log.Warnf("SHUTDOWN: %s has made a Peek shutdown request.", c.ClientIP())
+	log.Warn("Peek is shutting down...")
+	log.Fatalf("Peek has been shut down due to a client's request. Client's info: IP: %s, Country: %s", c.ClientIP(), countryFromIP(c.ClientIP()))
+	return
 }
 
 // @Summary Returns the logfile in plain text
@@ -428,13 +450,19 @@ func stopPeek(c *gin.Context) {
 // @Failure 429
 // @Failure 500 "Internal Server Error"
 // @param download query bool false "If true, the logfile will be downloaded"
+// @param Authorization query string false "The auth token to use to access this endpoint"
 // @Tags apiLogsGroup
 // @Router /logs/all [get]
 // Return the logs
 func apiLogs(c *gin.Context) {
-	config, _ := ConfigParser()
-
-	// todo: add auth check
+	config, err := ConfigParser()
+	if err != nil {
+		log.Errorf("Failed to get config: %s", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"err": err,
+		})
+		return
+	}
 
 	if !config.Show.ShowLogsAPI {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -442,6 +470,17 @@ func apiLogs(c *gin.Context) {
 		})
 		return
 	}
+
+	if config.Auth.AuthRequired {
+		if !isAuthed(c) {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"err": "Unauthorized",
+				"msg": "You must be authenticated to access this endpoint.",
+			})
+			return
+		}
+	}
+
 	if c.Query("download") == "true" {
 		usrHome, _ := os.UserHomeDir()
 		peekLogPath := path.Join(usrHome, ".config/peek", "peek.log")
@@ -457,8 +496,8 @@ func apiLogs(c *gin.Context) {
 			})
 		}
 		c.String(200, string(fileContents))
+		return
 	}
-
 }
 
 // @Summary Shows a page with a very simple heartbeat message

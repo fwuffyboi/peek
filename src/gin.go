@@ -111,14 +111,15 @@ func runGin(host string, port int, ginRatelimit int) {
 		apiAuthGroup := v1API.Group("/auth") // authentication
 		{
 			apiAuthGroup.POST("/create/session/", rl, func(c *gin.Context) { createSession(c) }) // create an auth token
+			// todo: be able to see all created auth sessions, who created them and when they were created
 			// apiAuthGroup.POST("/verify/session/", rl, func(c *gin.Context) { verifySession(c) }) // verify an auth token
 		}
 
 		apiPeekGroup := v1API.Group("/peek") // peek
 		{
-			apiPeekGroup.POST("/stop/", rl, func(c *gin.Context) { stopPeek(c) })              // stop the peek application
-			apiPeekGroup.POST("/shutdown/", rl, func(c *gin.Context) { apiShutdownServer(c) }) // shutdown the server
-			apiPeekGroup.GET("/alerts/", rl, func(c *gin.Context) { apiReturnAlerts(c) })      // return all alerts
+			apiPeekGroup.PUT("/stop/", rl, func(c *gin.Context) { stopPeek(c) })              // stop the peek application
+			apiPeekGroup.PUT("/shutdown/", rl, func(c *gin.Context) { apiShutdownServer(c) }) // shutdown the server
+			apiPeekGroup.GET("/alerts/", rl, func(c *gin.Context) { apiReturnAlerts(c) })     // return all alerts
 		}
 	}
 

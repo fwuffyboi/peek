@@ -72,6 +72,8 @@ func returnAuthTokens() []string {
 func createSession(c *gin.Context) (success bool, failReason string, token string) {
 	// Create a session for the user
 	// todo: make this use a more secure method of password storage
+	// todo: make sessions store the time created
+	// todo: store sessions on disk, not in memory
 
 	// log
 	log.Infof("AUTH: Creating session for user IP: %s", c.ClientIP())
