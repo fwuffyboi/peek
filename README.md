@@ -17,34 +17,36 @@ This application is designed to be used on a linux server, however it may also b
 ### Installation
 To install Peek, you will need to have Go installed on your system. If you do not have Go installed, you can download it from [here](https://golang.org/dl/) (https://golang.org/dl).
 
-Once you have Go installed, you can install Peek by running this command:
+Once installed, if you are reading this on GitHub, please look to the right of your screen and look at the name of the latest release. If you are _not_ reading this on GitHub, please go to the [releases page](https://github.com/fwuffyboi/peek/releases) and copy the name of the latest release. If you are confused, please see the below image:
+
+![GitHub releases page for Peek](/src/assets/readme/ss-release.png)
+
+In the case of the above image, the latest release is titled "v0.8.8-alpha".
+When you have this, you can run the following commands to install Peek. Replace "RELEASE_NAME" with the name of the latest release.
+
 ```bash
-git clone --branch v0.8.8-alpha https://github.com/fwuffyboi/peek.git # Clone the repo
-cd peek/src                                     # Go into the necessary directory
-go build -o peek .                              # Build the file
-sudo chmod +x peek                              # Make the file executable
-sudo mv peek /usr/local/bin/peek                # Move the file to /usr/local/bin
-cd ../..                                        # Get out of the directory
-sudo rm -rf peek                                # Delete the unnecessary repo
+git clone --branch RELEASE_NAME https://github.com/fwuffyboi/peek.git # Clone the repo
+cd peek/src                                     # Go into the necessary directories
+go build -o peek .                              # Build the application, (should only take a minute at most)
+sudo chmod +x peek                              # Make sure that the file is executable
+sudo mv peek /usr/local/bin/peek                # Move the file to /usr/local/bin, for local user installation
+cd ../..                                        # Leave both directories
+sudo rm -rf peek                                # Delete the now-unnecessary repo
 ```
 
 Then just run the command `peek` in your terminal to start. You can now access the server at its default port of `http://0.0.0.0:42649`.
-
-⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
-
-**WARNING: Currently, Peek does not have any authentication. This means that anyone on your server's local network can access the server's API, and they _WILL_ be able to access _ALL_ statistics and endpoints that are enabled in the configuration file. However, the default configuration is considered to be a "Safe default", allowing anyone on the local network to _ONLY_ view the logs of Peek (This is not sensitive information) or be able to see system information EXCEPT the server's public IP address. No actions (such as shutting the server down, or stopping peek) can be taken from the API on these defaults.** 
-
-⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
 
 ### How to configure
 
 To configure Peek, you must first run the application after moving it to /usr/local/bin/peek. This will create a default configuration in /home/{YOUR_USERNAME}/.config/peek called peek.config.yaml. It is recommended to stop the Peek application before editing this, as that can lead to unsaved changes. Once edited, start Peek again and it will load your new configuration. If there is an issue with it not working, please feel free to create a GitHub issue.
 
+
 ### Log file
 
 The name of the log file in the Peek configuration file is what the log file will be called.
 The log file's location will remain in `/home/YOUR_USERNAME/.config/peek/`. This only changes the file's name. Nothing else. The default log file value is "peek.log".
+
 
 ### Logging level
 
@@ -54,6 +56,7 @@ The default is INFO, this shows most information that users would care about, an
 There are also the other options: WARN, ERR and FATA.
 
 WARN only shows warnings in the program, and isn't very helpful. ERR only shows errors, and FATA only shows what caused a program to stop running. It is highly recommended to stick to the default. As this shows information that is critically helpful during debugging.
+
 
 ### How to uninstall
 
@@ -67,27 +70,37 @@ sudo rm -rf /home/{YOUR_USERNAME}/.config/peek
 ```
 
 
-### Screenshots (From v0.8.7-alpha)
-![Screenshot](/src/assets/readme/ss-api-full.png)
-URL: `/api/stats/all`
+### Screenshots (From v0.10.0-alpha)
+Some screenshots of the API in action.
 
-The above screenshot shows the full API response from the server.
-This is the most detailed response you can get from the API. Below is shown an example of what peek would log for this request.
-I request the /api/stats/all endpoint from my Pixel 6a device on IP 192.168.0.57, to my server at 192.168.0.80. The server's hostname is fedorable.
+Since the last update, the API has been completely rewritten to be more user-friendly and easier to understand. A basic authentication system has also been put into place.
 
-`{"clientIP":"192.168.0.57","dataLength":716,"hostname":"fedorable","latency":4,"level":"info","method":"GET","msg":"192.168.0.57 - fedorable [17/Feb/2024:10:22:08 +0000] \"GET /api/stats/all/\" 200 716 \"\" \"Mozilla/5.0 (Android 14; Mobile; rv:122.0) Gecko/122.0 Firefox/122.0\" (4ms)","path":"/api/full/","referer":"","statusCode":200,"time":"2024-02-17T10:22:08Z","userAgent":"Mozilla/5.0 (Android 14; Mobile; rv:122.0) Gecko/122.0 Firefox/122.0"}`
+![ss-api-stats-all-auth](/src/assets/readme/ss-api-stats-all-auth.png)
 
-This request took 4ms(precisely 4.029865ms) total to complete. This includes getting all the data, reverse geolocating the IP, etc., and sending the response back to the client.
+URL: `/api/v1/stats/all`
 
-![Screenshot](/src/assets/readme/ss-api-endpoints.png)
-URL: `/api/`
+The above screenshot shows what this endpoint responds with, under authenticated users. Below is what unauthenticated users would see.
 
-The above screenshot shows the API endpoints available to the client.
+![ss-api-stats-all-unauth](/src/assets/readme/ss-api-stats-all-unauth.png)
 
-![Screenshot](/src/assets/readme/ss-api-index.png)
-URL: `/`
+When I request the `/api/v1/stats/all/` endpoint from my cell phone, Peek on my server reports a varying response time of between `4ms to 6.5ms` 
 
-The above screenshot shows the index page of the API.
+
+Peek has a new endpoint that allows you to see "alerts" for your installation. Currently, alerts only consist of update reminders. This is a screenshot of the alerts endpoint.
+![ss-api-peek-alerts-auth](/src/assets/readme/ss-api-peek-alerts-auth.png)
+
+
+Recently, the API has been updated to allow the use of a built-in rate limiter. As well as a swagger UI for the API.
+
+![ss-api-swagger](/src/assets/readme/ss-api-swagger.png)
+
+URL: `/api/swagger/index.html`
+
+The rate limiter is, by default, set to 5 requests per second, but this is easily customizable in the config file. This is the response when the rate limit is exceeded.
+
+![ss-api-ratelimit](/src/assets/readme/ss-api-ratelimit.png)
+
+URL: `Any! (Except swagger/*)`
 
 
 ### Credits/Contributors
