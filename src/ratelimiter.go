@@ -25,11 +25,11 @@ type Info struct {
 }
 
 type DebugInfo struct {
-	ResetTime  string `json:"resetTime"`
-	Limit      int    `json:"limit"`
-	ClientIP   string `json:"clientIP"`
-	ServerIP   string `json:"serverIP"`
-	ServerPort string `json:"serverPort"`
+	ResetTime string `json:"resetTime"`
+	Limit     int    `json:"limit"`
+	ClientIP  string `json:"clientIP"`
+	ServerIP  string `json:"serverIP"`
+	// ServerPort string `json:"serverPort"`
 }
 
 func rlErrorHandler(c *gin.Context, info ratelimit.Info) {
