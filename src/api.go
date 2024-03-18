@@ -80,6 +80,9 @@ type cpuStruct struct {
 	CPUMhz       int    `json:"mhz"`
 	CPUCacheSize int    `json:"cacheSize"`
 }
+type diskStruct struct {
+	Disks []DiskUsage `json:"disks"`
+}
 type apiFullResponse struct {
 	Application applicationStruct    `json:"application"`
 	Client      clientStruct         `json:"client"`
@@ -88,6 +91,7 @@ type apiFullResponse struct {
 	Hostname    hostnameStruct       `json:"hostname"`
 	Memory      memoryStruct         `json:"memory"`
 	CPU         cpuStruct            `json:"cpu"`
+	Disk        diskStruct           `json:"disk"`
 	Alerts      map[string]time.Time `json:"alerts"`
 }
 
@@ -160,6 +164,9 @@ func allStatsAPI(c *gin.Context) {
 	// CPU info
 	var CPUVendor, CPUModel, CPUModelName string
 	var CPUCores, CPUMhz, CPUCacheSize int
+
+	// disks
+	var DiskUsageList []DiskUsage
 
 	// time
 	var serverTZ string
@@ -281,6 +288,19 @@ func allStatsAPI(c *gin.Context) {
 		log.Infof("CPU: Vendor: %s, Model: %s, Model Name: %s, Cores: %d, MHz: %d, Cache Size: %d", CPUVendor, CPUModel, CPUModelName, CPUCores, CPUMhz, CPUCacheSize)
 	}
 
+	if !config.Show.ShowDisk {
+		DiskUsageList = nil
+	} else {
+		DiskUsageList, err = storageAllDisks()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"err": err,
+			})
+			return
+		}
+
+	}
+
 	// Send the JSON response
 	c.JSON(http.StatusOK, apiFullResponse{
 		Application: applicationStruct{
@@ -328,6 +348,9 @@ func allStatsAPI(c *gin.Context) {
 			CPUCores:     CPUCores,
 			CPUMhz:       CPUMhz,
 			CPUCacheSize: CPUCacheSize,
+		},
+		Disk: diskStruct{
+			Disks: DiskUsageList,
 		},
 		Alerts: getAlerts(),
 	})
