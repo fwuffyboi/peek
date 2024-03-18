@@ -20,7 +20,7 @@ func GetHighestCPUTemp() (string, string, error) {
 
 	files, err := os.ReadDir(thermalZonePath)
 	if err != nil {
-		log.Error("[GHCT]   Failed to read thermalZonePath directory. Err: ", err)
+		log.Error("Failed to read thermalZonePath directory. Err: ", err)
 		return "ERROR", "UNKNOWN", err
 	}
 
@@ -34,7 +34,7 @@ func GetHighestCPUTemp() (string, string, error) {
 
 			temp, err := strconv.Atoi(strings.TrimSpace(string(tempBytes))) // make temp an int
 			if err != nil {                                                 // if error, stop
-				log.Error("[GHCT]   Failed to convert temp to int. Err: ", err) // ;-;
+				log.Error("Failed to convert temp to int. Err: ", err) // ;-;
 				return "ERROR", "UNKNOWN", err
 			}
 
@@ -44,7 +44,7 @@ func GetHighestCPUTemp() (string, string, error) {
 				highestTemp = cTemp
 				highestZone = cZone
 			}
-			log.Infof("[GHCT]   cTemp: %d, cZone: %s", cTemp, cZone)
+			log.Infof("cTemp: %d, cZone: %s", cTemp, cZone)
 		}
 	}
 
@@ -55,7 +55,7 @@ func GetCPUUsage() (string, error) {
 	// Get CPU usage percentages for all CPU cores
 	percentages, err := cpu.Percent(0, false)
 	if err != nil {
-		log.Error("[GCPU]   Error:", err)
+		log.Error("Error:", err)
 		return "ERROR", err
 	}
 
@@ -69,7 +69,7 @@ func GetCPUUsage() (string, error) {
 	averageUsage := totalUsage / float64(len(percentages))
 
 	// Print average CPU usage
-	log.Infof("[GCPU]   Average CPU Usage: %.2f%%", averageUsage)
+	log.Infof("Average CPU Usage: %.2f%%", averageUsage)
 	return fmt.Sprintf("%.2f", averageUsage), nil
 }
 
