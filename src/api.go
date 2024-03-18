@@ -200,7 +200,7 @@ func allStatsAPI(c *gin.Context) {
 			clientCountry = "unknown"
 		} else {
 			clientCountry = countryFromIP(cip)
-			clientFlag = "https://flagpedia.net/data/flags/emoji/twitter/256x256/" + clientCountry + ".png"
+			clientFlag = "https://flagpedia.net/data/flags/emoji/twitter/256x256/" + strings.ToLower(clientCountry) + ".png"
 		}
 
 	}
