@@ -12,7 +12,7 @@ const (
 	DefaultWebuiAddress = "0.0.0.0:42649" // Address of the webserver, HAS to be in the format of: IP:PORT
 
 	// VERSION Version of Peek
-	VERSION = "v0.9.1-alpha" // Version of Peek
+	VERSION = "v0.9.2-alpha" // Version of Peek
 
 	// DefaultWebUiHost Default host for the web UI, in case it is not provided/invalid in the config file
 	DefaultWebUiHost = "0.0.0.0"
