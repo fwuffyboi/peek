@@ -98,7 +98,7 @@ type apiFullResponse struct {
 // @Success 200 "All stats are shown in JSON format"
 // @Failure 401 "Unauthorized/auth error, make a session first and use that token to access this endpoint"
 // @Failure 429
-// @param Authorization query string false "The auth token to use to access this endpoint."
+// @param Authorization header string false "The auth token to use to access this endpoint."
 // @Tags apiStatsGroup
 // @Router /stats/all [get]
 // allStatsAPI Shows all API stats
@@ -343,7 +343,7 @@ func allStatsAPI(c *gin.Context) {
 // @Failure 401 "Unauthorized/auth error, make a session first and use that token to access this endpoint"
 // @Failure 429
 // @Failure 500
-// @param Authorization query string false "The auth token to use to access this endpoint"
+// @param Authorization header string false "The auth token to use to access this endpoint"
 // @Tags apiPeekGroup
 // @Router /peek/shutdown [put]
 // apiShutdownServer Shuts down the server
@@ -403,7 +403,7 @@ func apiShutdownServer(c *gin.Context) {
 // @Failure 429
 // @Failure 500 "Internal Server Error"
 // @Tags apiPeekGroup
-// @param Authorization query string false "The auth token to use to access this endpoint"
+// @param Authorization header string false "The auth token to use to access this endpoint"
 // @Router /peek/stop [put]
 // stopPeek Stops the Peek application
 func stopPeek(c *gin.Context) {
@@ -450,7 +450,7 @@ func stopPeek(c *gin.Context) {
 // @Failure 429
 // @Failure 500 "Internal Server Error"
 // @param download query bool false "If true, the logfile will be downloaded"
-// @param Authorization query string false "The auth token to use to access this endpoint"
+// @param Authorization header string false "The auth token to use to access this endpoint"
 // @Tags apiLogsGroup
 // @Router /logs/all [get]
 // Return the logs

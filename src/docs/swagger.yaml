@@ -38,12 +38,8 @@ paths:
       responses:
         "200":
           description: Session created
-          schema:
-            type: string
         "401":
           description: No/Incorrect username OR password provided
-          schema:
-            type: string
         "500":
           description: Internal Server Error
       summary: Create a session token
@@ -76,7 +72,7 @@ paths:
         name: download
         type: boolean
       - description: The auth token to use to access this endpoint
-        in: query
+        in: header
         name: Authorization
         type: string
       produces:
@@ -98,7 +94,7 @@ paths:
       description: Returns all alerts
       parameters:
       - description: The auth token to use to access this endpoint.
-        in: query
+        in: header
         name: Authorization
         type: string
       produces:
@@ -126,7 +122,7 @@ paths:
       description: Shuts down the server
       parameters:
       - description: The auth token to use to access this endpoint
-        in: query
+        in: header
         name: Authorization
         type: string
       produces:
@@ -153,7 +149,7 @@ paths:
       description: Stop the Peek application
       parameters:
       - description: The auth token to use to access this endpoint
-        in: query
+        in: header
         name: Authorization
         type: string
       produces:
@@ -184,7 +180,7 @@ paths:
         and the server's flag.
       parameters:
       - description: The auth token to use to access this endpoint.
-        in: query
+        in: header
         name: Authorization
         type: string
       produces:

@@ -48,7 +48,7 @@ func getAlerts() map[string]time.Time {
 // @Failure 429
 // @Failure 500
 // @Tags apiPeekGroup
-// @param Authorization query string false "The auth token to use to access this endpoint."
+// @param Authorization header string false "The auth token to use to access this endpoint."
 // @Router /peek/alerts [get]
 func apiReturnAlerts(c *gin.Context) {
 

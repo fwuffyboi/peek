@@ -15,10 +15,10 @@ func isAuthed(c *gin.Context) bool {
 
 	// If the token is valid, return true
 	authTokenHeader := c.Request.Header.Get("Authorization")
-	authTokenQuery := c.Query("Authorization")
+	// fmt.Println(authTokenHeader)
 	authTokens := returnAuthTokens()
 
-	if authTokenHeader == "" && authTokenQuery == "" {
+	if authTokenHeader == "" {
 
 		// log
 		log.Warnf("AUTH: ACCESS DENIED. Reason: No auth token provided by user IP: %s", c.ClientIP())
@@ -28,7 +28,7 @@ func isAuthed(c *gin.Context) bool {
 	}
 
 	for _, token := range authTokens {
-		if token == authTokenHeader || token == authTokenQuery { // Token is valid
+		if token == authTokenHeader { // Token is valid
 
 			// log
 			log.Warnf("AUTH: ACCESS GRANTED. Reason: Auth token provided by user IP: %s", c.ClientIP())
@@ -59,8 +59,8 @@ func returnAuthTokens() []string {
 // @Produce json
 // @Param username formData string true "Username"
 // @Param password formData string true "Password"
-// @Success 200 {string} string "Session created"
-// @Failure 401 {string} string "No/Incorrect username OR password provided"
+// @Success 200 "Session created"
+// @Failure 401 "No/Incorrect username OR password provided"
 // @Failure 500
 // @Tags apiAuthGroup
 // @Router /auth/create/session/ [post]

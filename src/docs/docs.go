@@ -66,16 +66,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Session created",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "Session created"
                     },
                     "401": {
-                        "description": "No/Incorrect username OR password provided",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "No/Incorrect username OR password provided"
                     },
                     "500": {
                         "description": "Internal Server Error"
@@ -130,7 +124,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "The auth token to use to access this endpoint",
                         "name": "Authorization",
-                        "in": "query"
+                        "in": "header"
                     }
                 ],
                 "responses": {
@@ -164,7 +158,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "The auth token to use to access this endpoint.",
                         "name": "Authorization",
-                        "in": "query"
+                        "in": "header"
                     }
                 ],
                 "responses": {
@@ -207,7 +201,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "The auth token to use to access this endpoint",
                         "name": "Authorization",
-                        "in": "query"
+                        "in": "header"
                     }
                 ],
                 "responses": {
@@ -247,7 +241,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "The auth token to use to access this endpoint",
                         "name": "Authorization",
-                        "in": "query"
+                        "in": "header"
                     }
                 ],
                 "responses": {
@@ -284,7 +278,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "The auth token to use to access this endpoint.",
                         "name": "Authorization",
-                        "in": "query"
+                        "in": "header"
                     }
                 ],
                 "responses": {
