@@ -4,6 +4,7 @@ import (
 	"fmt"
 	tgbot "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	log "github.com/sirupsen/logrus"
+	"strings"
 )
 
 func sendTelegramMessage(message string) (err error) {
@@ -32,8 +33,13 @@ func sendTelegramMessage(message string) (err error) {
 	// create bot
 	bot, err := tgbot.NewBotAPI(telegramBotToken)
 	if err != nil {
-		log.Error("Error creating bot: ", err)
-		return fmt.Errorf("error creating bot: %v", err)
+
+		// turn error into a string
+		errStr := fmt.Sprintf("%v", err)
+		errStr = strings.Replace(errStr, telegramBotToken, strings.Repeat("*", len(telegramBotToken)), -1)
+
+		log.Error("Error creating bot: ", errStr)
+		return fmt.Errorf("error creating bot: %v", errStr)
 	}
 	bot.Debug = false // just to make sure we are not using dev mode.
 
