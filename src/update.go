@@ -31,71 +31,75 @@ func CheckForPeekUpdate() {
 		resp, err := http.Get(url)
 		if err != nil {
 			log.Errorf("Error making request to GitHub API: %s", err)
-		}
-		defer resp.Body.Close() // todo error handle this
-
-		// read response
-		body, err := io.ReadAll(resp.Body)
-		if err != nil {
-			log.Errorf("Error reading response body: %s", err)
+			addAlert("Couldn't get latest releases from GitHub!")
 		}
 
-		// parse response
-		var releases []Release
-		if err := json.Unmarshal(body, &releases); err != nil {
+		if err == nil {
+			defer resp.Body.Close() // todo error handle this
 
-			// if error, see if it's a ratelimit error.
-			if strings.Contains(string(body), "API rate limit exceeded") {
-				log.Warnf("GitHub API rate limit exceeded! Will check for updates again in 1 hour...")
-
-				// send alert
-				if _, ok := getAlerts()["GitHub API rate limit exceeded!"]; !ok {
-					addAlert("GitHub API rate limit exceeded!")
-				} else {
-					log.Info("Alert already sent, skipping...")
-				}
-			} else {
-				log.Errorf("Unknown error unmarshalling JSON: %s", err)
+			// read response
+			body, err := io.ReadAll(resp.Body)
+			if err != nil {
+				log.Errorf("Error reading response body: %s", err)
 			}
 
-		} else {
-			// Unmarshalled it just fine. Continue with the rest of the code.
+			// parse response
+			var releases []Release
+			if err := json.Unmarshal(body, &releases); err != nil {
 
-			if len(releases) == 0 {
-				log.Info("No releases found! Assuming on latest version.")
-				log.Info("Will check for updates in 1 hour...")
-			} else {
-				// compare versions
-				latestVersion = releases[0].TagName
-				relComp := compareVersions(currentVersion, latestVersion)
-				if relComp == -1 {
-					// current version is older than newer version
-					log.Infof("New version found! Current: %s, Latest: %s", currentVersion, latestVersion)
+				// if error, see if it's a ratelimit error.
+				if strings.Contains(string(body), "API rate limit exceeded") {
+					log.Warnf("GitHub API rate limit exceeded! Will check for updates again in 1 hour...")
 
-					// check if alert already sent
-					if _, ok := getAlerts()["New update available! Current: "+currentVersion+", Latest: "+latestVersion]; !ok {
-						addAlert("New update available! Current: " + currentVersion + ", Latest: " + latestVersion)
-					} else {
-						log.Info("Alert already sent, skipping...")
-					}
-
-				} else if relComp == 1 {
-					log.Warnf("You are running a newer version than the latest release! Current: %s, Latest: %s", currentVersion, latestVersion)
-
-					// check if alert already sent
-					if _, ok := getAlerts()["You are running a newer version than the latest release! Current: "+currentVersion+", Latest: "+latestVersion]; !ok {
-						addAlert("You are running a newer version than the latest release! Current: " + currentVersion + ", Latest: " + latestVersion)
+					// send alert
+					if _, ok := getAlerts()["GitHub API rate limit exceeded!"]; !ok {
+						addAlert("GitHub API rate limit exceeded!")
 					} else {
 						log.Info("Alert already sent, skipping...")
 					}
 				} else {
-					log.Info("You are running the latest version!")
+					log.Errorf("Unknown error unmarshalling JSON: %s", err)
 				}
 
-				log.Info("Will check for updates again in 1 hour...")
-			}
-		}
+			} else {
+				// Unmarshalled it just fine. Continue with the rest of the code.
 
+				if len(releases) == 0 {
+					log.Info("No releases found! Assuming on latest version.")
+					log.Info("Will check for updates in 1 hour...")
+				} else {
+					// compare versions
+					latestVersion = releases[0].TagName
+					relComp := compareVersions(currentVersion, latestVersion)
+					if relComp == -1 {
+						// current version is older than newer version
+						log.Infof("New version found! Current: %s, Latest: %s", currentVersion, latestVersion)
+
+						// check if alert already sent
+						if _, ok := getAlerts()["New update available! Current: "+currentVersion+", Latest: "+latestVersion]; !ok {
+							addAlert("New update available! Current: " + currentVersion + ", Latest: " + latestVersion)
+						} else {
+							log.Info("Alert already sent, skipping...")
+						}
+
+					} else if relComp == 1 {
+						log.Warnf("You are running a newer version than the latest release! Current: %s, Latest: %s", currentVersion, latestVersion)
+
+						// check if alert already sent
+						if _, ok := getAlerts()["You are running a newer version than the latest release! Current: "+currentVersion+", Latest: "+latestVersion]; !ok {
+							addAlert("You are running a newer version than the latest release! Current: " + currentVersion + ", Latest: " + latestVersion)
+						} else {
+							log.Info("Alert already sent, skipping...")
+						}
+					} else {
+						log.Info("You are running the latest version!")
+					}
+
+					log.Info("Will check for updates again in 1 hour...")
+				}
+			}
+
+		}
 		time.Sleep(1 * time.Hour)
 	}
 }
