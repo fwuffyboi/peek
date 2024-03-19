@@ -70,7 +70,7 @@ type T struct {
 			TelegramChatID   string `yaml:"telegram-chat-id"`
 			TelegramMessage  string `yaml:"telegram-message"`
 		} `yaml:"telegram"`
-	}
+	} `yaml:"integrations"`
 }
 
 // ConfigParser func for parsing the config file and returning all values
