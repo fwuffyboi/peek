@@ -49,6 +49,13 @@ show:
   show-logs-api: true          # Should the logs be shown on the API?
   show-timezone: true          # Should the server's timezone AND time be shown?
 
+disk:
+  exclude-disks: false  # would you like to exclude disks from being shown? Default: false
+  excluded-disks:
+    - "/boot"     # example 1
+    - "/boot/efi" # example 2
+
+
 integrations:
   telegram:
     telegram-enabled:   false              # Should the telegram integration be enabled?

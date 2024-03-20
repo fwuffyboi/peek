@@ -62,6 +62,12 @@ type T struct {
 		ShowTimezone      bool `yaml:"show-timezone"`
 	} `yaml:"show"`
 
+	// Disk stuff
+	Disk struct {
+		ExcludeDisks  bool     `yaml:"exclude-disks"`
+		ExcludedDisks []string `yaml:"excluded-disks"`
+	} `yaml:"disk"`
+
 	// integrations
 	Integrations struct {
 		Telegram struct {

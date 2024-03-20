@@ -57,65 +57,83 @@ func storageAllDisks() (allDiskUsage []DiskUsage, err error) {
 				continue
 			}
 
-			// get values from line fields
+			// get mount point from line fields
 			mountPoint := fields[1]
-			total, free, used, err := getDiskUsage(mountPoint)
-			if err != nil {
-				log.Errorf("Couldn't get disk usage for mountpoint: %s, error: %s", mountPoint, err)
-				return nil, err
+
+			// if the disk is in the excluded list, skip it
+			if config.Disk.ExcludeDisks {
+				// get the disk details here!
+				total, free, used, err := getDiskUsage(mountPoint)
+				if err != nil {
+					log.Errorf("Couldn't get disk usage for mountpoint: %s, error: %s", mountPoint, err)
+					return nil, err
+				}
+
+				// get the disk name and uuid
+				dfCmd := exec.Command("df", "--output=source", mountPoint)
+				dfOut, err := dfCmd.Output()
+				if err != nil {
+					return nil, err
+				}
+
+				device := strings.TrimSpace(string(dfOut))
+				device = strings.Split(device, "\n")[1] // The first line is the header
+
+				lsblkCmd := exec.Command("lsblk", "-o", "UUID,NAME", "-nl", device)
+				lsblkOut, err := lsblkCmd.Output()
+				if err != nil {
+					return nil, err
+				}
+
+				output := strings.TrimSpace(string(lsblkOut))
+				split := strings.Split(output, " ")
+
+				if len(split) < 2 {
+					return nil, fmt.Errorf("unexpected output from lsblk: %s", output)
+				}
+
+				uuid := split[0]
+				name := split[1]
+
+				// replace the name to "Unknown" if it's empty
+				if name == "" || name == " " {
+					name = "Unknown"
+				}
+
+				// calculate used percent
+				usedPercent := (float64(used) / float64(total)) * 100
+
+				// log
+				log.Infof("DiskPath: %s, DiskName: %s, UUID: %s, Total: %d, Free: %d, Used: %d\n", mountPoint, name, uuid, total, free, used)
+
+				// append to list
+				allDiskUsage = append(allDiskUsage, DiskUsage{
+					Path:        mountPoint,
+					DiskName:    name,
+					UUID:        uuid,
+					Total:       total,
+					Free:        free,
+					Used:        used,
+					UsedPercent: usedPercent,
+				})
 			}
-
-			// get the disk name and uuid
-			dfCmd := exec.Command("df", "--output=source", mountPoint)
-			dfOut, err := dfCmd.Output()
-			if err != nil {
-				return nil, err
+		}
+		// remove disks that are in the excluded list from the list of all disks
+		if config.Disk.ExcludeDisks {
+			for _, disk := range config.Disk.ExcludedDisks {
+				for i, diskUsage := range allDiskUsage {
+					if diskUsage.Path == disk {
+						allDiskUsage = append(allDiskUsage[:i], allDiskUsage[i+1:]...)
+					}
+				}
 			}
-
-			device := strings.TrimSpace(string(dfOut))
-			device = strings.Split(device, "\n")[1] // The first line is the header
-
-			lsblkCmd := exec.Command("lsblk", "-o", "UUID,NAME", "-nl", device)
-			lsblkOut, err := lsblkCmd.Output()
-			if err != nil {
-				return nil, err
-			}
-
-			output := strings.TrimSpace(string(lsblkOut))
-			split := strings.Split(output, " ")
-
-			if len(split) < 2 {
-				return nil, fmt.Errorf("unexpected output from lsblk: %s", output)
-			}
-
-			uuid := split[0]
-			name := split[1]
-
-			// calculate used percent
-			usedPercent := (float64(used) / float64(total)) * 100
-
-			// log
-			log.Infof("DiskPath: %s, DiskName: %s, UUID: %s, Total: %d, Free: %d, Used: %d\n", mountPoint, name, uuid, total, free, used)
-
-			// append to list
-			allDiskUsage = append(allDiskUsage, DiskUsage{
-				Path:        mountPoint,
-				DiskName:    name,
-				UUID:        uuid,
-				Total:       total,
-				Free:        free,
-				Used:        used,
-				UsedPercent: usedPercent,
-			})
 		}
 
+		return allDiskUsage, nil
+
 	} else {
-		log.Info("Disk usage is not set to be shown in the config")
-		return nil, nil
+		return nil, fmt.Errorf("disk usage is disabled in the config file")
 	}
-
-	return allDiskUsage, nil
-
 }
 
 func getDiskUsage(path string) (total, free, used uint64, err error) {
