@@ -94,7 +94,7 @@ Recently, the API has been updated to allow the use of a built-in rate limiter. 
 
 ![ss-api-swagger](/src/assets/readme/ss-api-swagger.png)
 
-URL: `/api/swagger/index.html`
+URL: `/swagger/index.html`
 
 The rate limiter is, by default, set to 5 requests per second, but this is easily customizable in the config file. This is the response when the rate limit is exceeded.
 
